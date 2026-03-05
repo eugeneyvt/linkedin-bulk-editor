@@ -1359,6 +1359,7 @@
       padding: 16px;
       transition: max-width .2s;
     }
+
     .text-modal.json-wide {
       max-width: 800px;
     }
@@ -1399,7 +1400,9 @@
       display: flex;
       gap: 4px;
       margin-bottom: 8px;
+      align-items: center;
     }
+
     .tm-view-toggle button {
       padding: 4px 10px;
       border: 1px solid var(--border);
@@ -1411,11 +1414,36 @@
       font-family: inherit;
       transition: all .15s;
     }
+
     .tm-view-toggle button.active {
       background: var(--li-blue);
       color: #fff;
       border-color: var(--li-blue);
     }
+
+    .jt-toolbar {
+      display: flex;
+      gap: 4px;
+      margin-left: auto;
+    }
+
+    .jt-toolbar button {
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text-muted);
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .15s;
+    }
+
+    .jt-toolbar button:hover {
+      border-color: var(--li-blue);
+      color: var(--li-blue);
+    }
+
     .json-tree {
       width: 100%;
       min-height: 200px;
@@ -1425,18 +1453,46 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       font-size: 12.5px;
-      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
       background: var(--bg-input);
       color: var(--text);
       line-height: 1.6;
       user-select: text;
     }
-    .json-tree .jt-key { color: #0550ae; font-weight: 600; }
-    .json-tree .jt-str { color: #0a3069; }
-    .json-tree .jt-num { color: #0550ae; }
-    .json-tree .jt-bool { color: #cf222e; }
-    .json-tree .jt-null { color: #8b949e; font-style: italic; }
-    .json-tree .jt-brace { color: var(--text-muted); }
+
+    .json-tree.ins-json-tree {
+      min-height: 80px;
+      max-height: 300px;
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+
+    .json-tree .jt-key {
+      color: #0550ae;
+      font-weight: 600;
+    }
+
+    .json-tree .jt-str {
+      color: #0a3069;
+    }
+
+    .json-tree .jt-num {
+      color: #0550ae;
+    }
+
+    .json-tree .jt-bool {
+      color: #cf222e;
+    }
+
+    .json-tree .jt-null {
+      color: #8b949e;
+      font-style: italic;
+    }
+
+    .json-tree .jt-brace {
+      color: var(--text-muted);
+    }
+
     .json-tree .jt-toggle {
       cursor: pointer;
       user-select: none;
@@ -1448,17 +1504,40 @@
       margin-right: 2px;
       transition: transform .15s;
     }
-    .json-tree .jt-toggle:hover { color: var(--li-blue); }
-    .json-tree .jt-collapsed > .jt-children { display: none; }
-    .json-tree .jt-collapsed > .jt-toggle { transform: rotate(-90deg); }
-    .json-tree .jt-collapsed > .jt-preview { display: inline; }
-    .json-tree .jt-preview { display: none; color: var(--text-muted); font-style: italic; font-size: 11px; }
+
+    .json-tree .jt-toggle:hover {
+      color: var(--li-blue);
+    }
+
+    .json-tree .jt-collapsed>.jt-children {
+      display: none;
+    }
+
+    .json-tree .jt-collapsed>.jt-toggle {
+      transform: rotate(-90deg);
+    }
+
+    .json-tree .jt-collapsed>.jt-preview {
+      display: inline;
+    }
+
+    .json-tree .jt-preview {
+      display: none;
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 11px;
+    }
+
     .json-tree .jt-section {
       margin: 0;
       padding-left: 18px;
       border-left: 1px solid var(--border);
     }
-    .json-tree .jt-line { white-space: nowrap; }
+
+    .json-tree .jt-line {
+      white-space: nowrap;
+    }
+
     .json-tree .jt-facet-label {
       display: inline-block;
       background: color-mix(in srgb, var(--li-blue) 12%, transparent);
@@ -1470,12 +1549,132 @@
       font-family: inherit;
       font-weight: 500;
     }
+
+    .json-tree .jt-count {
+      display: inline-block;
+      background: color-mix(in srgb, var(--text-muted) 15%, transparent);
+      color: var(--text-muted);
+      padding: 0 5px;
+      border-radius: 3px;
+      font-size: 10px;
+      margin-left: 3px;
+      font-weight: 600;
+    }
+
+    .ins-json-wrap {
+      position: relative;
+    }
+
+    .ins-json-actions {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+      align-items: center;
+    }
+
+    .ins-json-actions button {
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text-muted);
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .15s;
+    }
+
+    .ins-json-actions button:hover {
+      border-color: var(--li-blue);
+      color: var(--li-blue);
+    }
+
+    .json-tree .jt-editable {
+      cursor: pointer;
+      border-radius: 3px;
+      padding: 0 2px;
+      transition: background .12s;
+    }
+
+    .json-tree .jt-editable:hover {
+      background: color-mix(in srgb, var(--li-blue) 12%, transparent);
+      outline: 1px dashed color-mix(in srgb, var(--li-blue) 40%, transparent);
+    }
+
+    .jt-edit-input {
+      font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+      font-size: inherit;
+      padding: 1px 4px;
+      border: 1px solid var(--li-blue);
+      border-radius: 3px;
+      background: var(--bg-input);
+      color: var(--text);
+      outline: none;
+      min-width: 60px;
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--li-blue) 20%, transparent);
+    }
+
+    .json-tree .jt-del {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      font-size: 12px;
+      line-height: 1;
+      color: var(--text-faint);
+      cursor: pointer;
+      margin-right: 2px;
+      opacity: 0;
+      transition: all .12s;
+      vertical-align: middle;
+    }
+
+    .json-tree .jt-line:hover>.jt-del {
+      opacity: 1;
+    }
+
+    .json-tree .jt-del:hover {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    .json-tree .jt-add {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      color: var(--li-blue);
+      cursor: pointer;
+      transition: all .12s;
+      margin-left: 18px;
+    }
+
+    .json-tree .jt-add:hover {
+      background: color-mix(in srgb, var(--li-blue) 10%, transparent);
+    }
+
     @media (prefers-color-scheme: dark) {
-      .json-tree .jt-key { color: #79c0ff; }
-      .json-tree .jt-str { color: #a5d6ff; }
-      .json-tree .jt-num { color: #79c0ff; }
-      .json-tree .jt-bool { color: #ff7b72; }
-      .json-tree .jt-null { color: #8b949e; }
+      .json-tree .jt-key {
+        color: #79c0ff;
+      }
+
+      .json-tree .jt-str {
+        color: #a5d6ff;
+      }
+
+      .json-tree .jt-num {
+        color: #79c0ff;
+      }
+
+      .json-tree .jt-bool {
+        color: #ff7b72;
+      }
+
+      .json-tree .jt-null {
+        color: #8b949e;
+      }
     }
 
     /* ===== FIND & REPLACE PANEL ===== */
@@ -2149,6 +2348,14 @@
       <div class="tm-view-toggle" id="tmToggle" style="display:none;">
         <button id="tmBtnPretty" class="active">Pretty</button>
         <button id="tmBtnRaw">Raw</button>
+        <div class="jt-toolbar" id="tmTreeToolbar">
+          <button
+            onclick="document.querySelectorAll('#tmJsonView .jt-node').forEach(n=>n.classList.remove('jt-collapsed'))">Expand
+            All</button>
+          <button
+            onclick="document.querySelectorAll('#tmJsonView .jt-node').forEach(n=>n.classList.add('jt-collapsed'))">Collapse
+            All</button>
+        </div>
       </div>
       <div id="tmJsonView" class="json-tree" style="display:none;"></div>
       <textarea id="tmArea"></textarea>
@@ -3221,6 +3428,14 @@
         if (col.type === 'cta') {
           return `<div class="ins-row"><label>${esc(col.h)}</label><select class="ins-field${issueCls}" data-ins-k="${col.k}"${issueTitle}><option value="">—</option>${s.ctaOptions.map(o => `<option value="${esc(o)}" ${v === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select></div>`;
         }
+        // Pretty JSON view for audienceString in inspector
+        if (col.k === 'audienceString' && v.trim().startsWith('{')) {
+          try {
+            const parsed = JSON.parse(v);
+            const treeHtml = buildJsonTree(parsed, 0, true);
+            return `<div class="ins-row"><label>${esc(col.h)}</label><div class="ins-json-wrap"><div class="json-tree ins-json-tree" data-ins-json-k="${col.k}">${treeHtml}</div><div class="ins-json-actions"><button class="ins-json-expand-all" title="Expand all nodes">Expand All</button><button class="ins-json-collapse-all" title="Collapse all nodes">Collapse All</button><button class="ins-json-open-modal" data-k="${col.k}" data-h="${esc(col.h)}">✎ Edit in modal</button></div></div></div>`;
+          } catch (e) { /* fall through to plain textarea */ }
+        }
         return `<div class="ins-row"><label>${esc(col.h)}</label><textarea class="ins-field ins-auto${issueCls}" data-ins-k="${col.k}"${issueTitle} rows="1">${esc(v)}</textarea></div>`;
       }).join('');
 
@@ -3273,6 +3488,33 @@
             renderInspector();
           });
         }
+      });
+
+      // Inspector JSON tree: expand/collapse all, open modal, and inline editing
+      zone.querySelectorAll('.ins-json-expand-all').forEach(btn => btn.addEventListener('click', () => {
+        btn.closest('.ins-json-wrap').querySelectorAll('.jt-node').forEach(n => n.classList.remove('jt-collapsed'));
+      }));
+      zone.querySelectorAll('.ins-json-collapse-all').forEach(btn => btn.addEventListener('click', () => {
+        btn.closest('.ins-json-wrap').querySelectorAll('.jt-node').forEach(n => n.classList.add('jt-collapsed'));
+      }));
+      zone.querySelectorAll('.ins-json-open-modal').forEach(btn => btn.addEventListener('click', () => {
+        openTextModal(activeTab, idx, btn.dataset.k, btn.dataset.h);
+      }));
+      // Inline editing for inspector JSON tree
+      zone.querySelectorAll('[data-ins-json-k]').forEach(treeEl => {
+        const k = treeEl.dataset.insJsonK;
+        const rawVal = row[k] || '';
+        let insParsed;
+        try { insParsed = JSON.parse(rawVal); } catch (e) { return; }
+        attachJsonTreeHandlers(treeEl, insParsed, (updated) => {
+          const minified = JSON.stringify(updated);
+          setCellValue(activeTab, idx, k, minified);
+          runValidation(activeTab);
+          renderPreflight();
+          renderTable();
+          updateBar();
+          renderInspector();
+        });
       });
 
       const filtered = getFiltered(activeTab).map(x => x.i);
@@ -3341,16 +3583,25 @@
       'urn:li:adTargetingFacet:ageRanges': 'Age Ranges',
       'urn:li:adTargetingFacet:genders': 'Genders',
     };
-    function buildJsonTree(val, depth = 0) {
-      if (val === null) return '<span class="jt-null">null</span>';
-      if (typeof val === 'boolean') return `<span class="jt-bool">${val}</span>`;
-      if (typeof val === 'number') return `<span class="jt-num">${val}</span>`;
-      if (typeof val === 'string') return `<span class="jt-str">"${esc(val)}"</span>`;
+    function buildJsonTree(val, depth = 0, compact = false, path = []) {
+      const jp = btoa(JSON.stringify(path));
+      if (val === null) return `<span class="jt-null jt-editable" data-jpath="${jp}" title="Click to edit">null</span>`;
+      if (typeof val === 'boolean') return `<span class="jt-bool jt-editable" data-jpath="${jp}" title="Click to edit">${val}</span>`;
+      if (typeof val === 'number') return `<span class="jt-num jt-editable" data-jpath="${jp}" title="Click to edit">${val}</span>`;
+      if (typeof val === 'string') return `<span class="jt-str jt-editable" data-jpath="${jp}" title="Click to edit">&quot;${esc(val)}&quot;</span>`;
+      const collapseDepth = compact ? 2 : 3;
       if (Array.isArray(val)) {
-        if (val.length === 0) return '<span class="jt-brace">[]</span>';
-        const items = val.map(v => `<div class="jt-line">${buildJsonTree(v, depth + 1)},</div>`).join('');
+        const addPath = btoa(JSON.stringify(path));
+        const addBtn = `<div class="jt-line"><span class="jt-add" data-jadd="${addPath}">+ Add item</span></div>`;
+        if (val.length === 0) return `<span class="jt-node"><span class="jt-brace">[</span><div class="jt-children jt-section">${addBtn}</div><span class="jt-brace">]</span></span>`;
+        const items = val.map((v, i) => {
+          const delPath = btoa(JSON.stringify([...path, i]));
+          return `<div class="jt-line"><span class="jt-del" data-jdel="${delPath}" title="Remove">&times;</span>${buildJsonTree(v, depth + 1, compact, [...path, i])},</div>`;
+        }).join('');
+        const countBadge = `<span class="jt-count">${val.length}</span>`;
         const preview = `<span class="jt-preview">[${val.length} items]</span>`;
-        return `<span class="jt-node"><span class="jt-toggle" onclick="this.parentElement.classList.toggle('jt-collapsed')">▼</span><span class="jt-brace">[</span>${preview}<div class="jt-children jt-section">${items}</div><span class="jt-brace">]</span></span>`;
+        const autoCollapse = depth >= collapseDepth ? ' jt-collapsed' : '';
+        return `<span class="jt-node${autoCollapse}"><span class="jt-toggle" onclick="this.parentElement.classList.toggle('jt-collapsed')">▼</span><span class="jt-brace">[</span>${countBadge}${preview}<div class="jt-children jt-section">${items}${addBtn}</div><span class="jt-brace">]</span></span>`;
       }
       if (typeof val === 'object') {
         const keys = Object.keys(val);
@@ -3358,29 +3609,137 @@
         const items = keys.map(k => {
           const facet = FACET_LABELS[k];
           const label = facet ? `<span class="jt-facet-label">${esc(facet)}</span>` : '';
-          return `<div class="jt-line"><span class="jt-key">"${esc(k)}"</span>${label}: ${buildJsonTree(val[k], depth + 1)},</div>`;
+          const child = val[k];
+          const countHint = (Array.isArray(child) && child.length > 0) ? `<span class="jt-count">${child.length}</span>` : '';
+          return `<div class="jt-line"><span class="jt-key">"${esc(k)}"</span>${label}${countHint}: ${buildJsonTree(child, depth + 1, compact, [...path, k])},</div>`;
         }).join('');
         const preview = `<span class="jt-preview">{${keys.length} keys}</span>`;
-        const autoCollapse = depth >= 3 ? ' jt-collapsed' : '';
+        const autoCollapse = depth >= collapseDepth ? ' jt-collapsed' : '';
         return `<span class="jt-node${autoCollapse}"><span class="jt-toggle" onclick="this.parentElement.classList.toggle('jt-collapsed')">▼</span><span class="jt-brace">{</span>${preview}<div class="jt-children jt-section">${items}</div><span class="jt-brace">}</span></span>`;
       }
       return esc(String(val));
     }
 
+    /* --- JSON inline editing helpers --- */
+    function getByPath(obj, path) {
+      let cur = obj;
+      for (const seg of path) cur = cur[seg];
+      return cur;
+    }
+    function setByPath(obj, path, val) {
+      let cur = obj;
+      for (let i = 0; i < path.length - 1; i++) cur = cur[path[i]];
+      cur[path[path.length - 1]] = val;
+    }
+
+    function startInlineEdit(el, parsedRoot, onCommit) {
+      if (el.querySelector('.jt-edit-input')) return; // already editing
+      const path = JSON.parse(atob(el.dataset.jpath));
+      const curVal = getByPath(parsedRoot, path);
+      const isString = typeof curVal === 'string';
+      const displayVal = isString ? curVal : JSON.stringify(curVal);
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'jt-edit-input';
+      input.value = displayVal;
+      input.style.width = Math.max(80, Math.min(400, displayVal.length * 8 + 20)) + 'px';
+
+      const origHTML = el.innerHTML;
+      el.innerHTML = '';
+      el.appendChild(input);
+      input.focus();
+      input.select();
+
+      let committed = false;
+      function commit() {
+        if (committed) return;
+        committed = true;
+        const raw = input.value.trim();
+        let newVal;
+        if (isString) {
+          newVal = raw;
+        } else {
+          // try to parse as JSON literal (number, boolean, null)
+          try { newVal = JSON.parse(raw); } catch (e) { newVal = raw; }
+        }
+        setByPath(parsedRoot, path, newVal);
+        onCommit(parsedRoot);
+      }
+      function cancel() {
+        if (committed) return;
+        committed = true;
+        el.innerHTML = origHTML;
+      }
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); commit(); }
+        if (e.key === 'Escape') { e.preventDefault(); cancel(); }
+      });
+      input.addEventListener('blur', () => { if (!committed) commit(); });
+    }
+
     let tmJsonMode = false;
+    let tmParsedJson = null;
+
+    function attachJsonTreeHandlers(container, parsedRoot, onUpdate) {
+      // Inline edit on leaf values
+      container.querySelectorAll('.jt-editable').forEach(el => {
+        el.addEventListener('click', e => {
+          e.stopPropagation();
+          startInlineEdit(el, parsedRoot, onUpdate);
+        });
+      });
+      // Delete array items
+      container.querySelectorAll('.jt-del').forEach(el => {
+        el.addEventListener('click', e => {
+          e.stopPropagation();
+          const path = JSON.parse(atob(el.dataset.jdel));
+          const arrPath = path.slice(0, -1);
+          const idx = path[path.length - 1];
+          const arr = getByPath(parsedRoot, arrPath);
+          arr.splice(idx, 1);
+          onUpdate(parsedRoot);
+        });
+      });
+      // Add array items
+      container.querySelectorAll('.jt-add').forEach(el => {
+        el.addEventListener('click', e => {
+          e.stopPropagation();
+          const path = JSON.parse(atob(el.dataset.jadd));
+          const arr = getByPath(parsedRoot, path);
+          // Guess the type from existing items
+          const sample = arr.length > 0 ? arr[0] : '';
+          const newVal = typeof sample === 'string' ? '' : (typeof sample === 'number' ? 0 : '');
+          arr.push(newVal);
+          onUpdate(parsedRoot);
+        });
+      });
+    }
+
+    function renderModalTree() {
+      const compact = false;
+      Q('#tmJsonView').innerHTML = buildJsonTree(tmParsedJson, 0, compact);
+      Q('#tmArea').value = JSON.stringify(tmParsedJson);
+      attachJsonTreeHandlers(Q('#tmJsonView'), tmParsedJson, (updated) => {
+        tmParsedJson = updated;
+        renderModalTree();
+      });
+    }
+
     function openTextModal(type, idx, key, header) {
       tmState = { type, idx, key };
       Q('#tmTitle').textContent = `Edit: ${header}`;
       const rawVal = S[type].cur[idx][key] || '';
       Q('#tmArea').value = rawVal;
+      tmParsedJson = null;
 
       // Try to detect JSON for audience string
       let isJson = false;
       if (key === 'audienceString' && rawVal.trim().startsWith('{')) {
         try {
-          const parsed = JSON.parse(rawVal);
+          tmParsedJson = JSON.parse(rawVal);
           isJson = true;
-          Q('#tmJsonView').innerHTML = buildJsonTree(parsed);
+          renderModalTree();
           Q('#tmJsonView').style.display = '';
           Q('#tmArea').style.display = 'none';
           Q('#tmToggle').style.display = '';
@@ -3401,6 +3760,11 @@
       if (!isJson) Q('#tmArea').focus();
     }
     Q('#tmBtnPretty').addEventListener('click', () => {
+      // Sync: if user edited raw text, re-parse into tmParsedJson
+      if (tmParsedJson) {
+        try { tmParsedJson = JSON.parse(Q('#tmArea').value); } catch (e) { /* keep old */ }
+        renderModalTree();
+      }
       Q('#tmJsonView').style.display = '';
       Q('#tmArea').style.display = 'none';
       Q('#tmBtnPretty').classList.add('active');
@@ -3408,11 +3772,15 @@
       tmJsonMode = true;
     });
     Q('#tmBtnRaw').addEventListener('click', () => {
-      // prettify the raw text when switching to raw view
-      try {
-        const parsed = JSON.parse(Q('#tmArea').value);
-        Q('#tmArea').value = JSON.stringify(parsed, null, 2);
-      } catch (e) { /* keep as-is */ }
+      // Sync: tmParsedJson → prettified textarea
+      if (tmParsedJson) {
+        Q('#tmArea').value = JSON.stringify(tmParsedJson, null, 2);
+      } else {
+        try {
+          const parsed = JSON.parse(Q('#tmArea').value);
+          Q('#tmArea').value = JSON.stringify(parsed, null, 2);
+        } catch (e) { /* keep as-is */ }
+      }
       Q('#tmJsonView').style.display = 'none';
       Q('#tmArea').style.display = '';
       Q('#tmBtnPretty').classList.remove('active');
@@ -3423,12 +3791,19 @@
     Q('#tmCancel').addEventListener('click', () => Q('#textModal').classList.remove('open'));
     Q('#tmSave').addEventListener('click', () => {
       const { type, idx, key } = tmState;
-      // If in pretty mode, we need to re-minify from the raw area (which hasn't changed)
-      // The raw textarea always holds the canonical value
-      let val = Q('#tmArea').value;
-      // If user edited in raw mode and it's valid JSON, re-minify for storage
-      if (key === 'audienceString') {
-        try { val = JSON.stringify(JSON.parse(val)); } catch(e) { /* keep as-is */ }
+      let val;
+      if (tmParsedJson && key === 'audienceString') {
+        // Use tmParsedJson as source of truth (handles both pretty and raw edits)
+        if (!tmJsonMode) {
+          // User was in raw mode — re-parse from textarea
+          try { tmParsedJson = JSON.parse(Q('#tmArea').value); } catch (e) { /* keep old */ }
+        }
+        val = JSON.stringify(tmParsedJson);
+      } else {
+        val = Q('#tmArea').value;
+        if (key === 'audienceString') {
+          try { val = JSON.stringify(JSON.parse(val)); } catch (e) { /* keep as-is */ }
+        }
       }
       setCellValue(type, idx, key, val);
       runValidation(type);
