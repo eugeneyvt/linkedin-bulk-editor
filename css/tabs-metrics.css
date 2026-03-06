@@ -5,14 +5,22 @@
   margin-bottom: 0;
   overflow-x: auto;
   scrollbar-width: thin;
-  padding: 3px 2px 10px;
+  padding: 2px 2px 6px;
+}
+
+#uploadsTabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding: 1px 2px;
 }
 
 .tab {
-  padding: 8px 14px;
+  padding: 7px 12px;
   cursor: pointer;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
   border: 1px solid rgba(66, 84, 102, 0.18);
@@ -70,8 +78,8 @@
 .preflight {
   background: var(--bg-elevated);
   border: 1px solid rgba(66, 84, 102, 0.18);
-  border-radius: 14px 14px 0 0;
-  padding: 10px 12px 8px;
+  border-radius: 12px 12px 0 0;
+  padding: 8px 10px 6px;
 }
 
 .pf-head {
@@ -79,11 +87,11 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .pf-title {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: .2px;
   color: var(--text-muted);
@@ -100,9 +108,9 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px 8px;
+  padding: 2px 7px;
   border-radius: 12px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   border: 1px solid var(--border);
 }
@@ -126,16 +134,16 @@
 }
 
 .pf-list {
-  margin-top: 6px;
+  margin-top: 4px;
   display: grid;
-  gap: 6px;
+  gap: 4px;
 }
 
 .pf-line {
   border: 1px solid var(--border-light);
   border-radius: 8px;
-  padding: 6px 9px;
-  font-size: 12px;
+  padding: 5px 8px;
+  font-size: 11px;
   line-height: 1.35;
 }
 
@@ -155,21 +163,21 @@
 }
 
 .workspace-head {
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   display: grid;
   grid-template-columns: repeat(4, minmax(120px, 1fr));
-  gap: 8px;
+  gap: 6px;
 }
 
 .wh-card {
   background: var(--bg-elevated);
   border: 1px solid rgba(66, 84, 102, 0.2);
-  border-radius: 12px;
-  padding: 8px 10px;
+  border-radius: 10px;
+  padding: 6px 8px;
 }
 
 .wh-label {
-  font-size: 10px;
+  font-size: 9px;
   text-transform: uppercase;
   letter-spacing: .35px;
   color: var(--text-faint);
@@ -178,13 +186,12 @@
 
 .wh-value {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text);
 }
 
 .wh-sub {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
 }
-

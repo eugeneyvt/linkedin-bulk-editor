@@ -3,8 +3,13 @@ function render() {
   const loaded = Object.keys(TYPES).filter(t => S[t].loaded);
   const container = Q('.container');
   if (!loaded.length) {
+    Q('#uploadsCtl').innerHTML = '';
+    Q('#tabs').innerHTML = '';
+    Q('#tabs').style.display = 'none';
     Q('#workspace').style.display = 'none';
     container.classList.add('upload-mode');
+    Q('#bar').classList.remove('show');
+    document.body.classList.remove('bar-open');
     return;
   }
   container.classList.remove('upload-mode');
@@ -16,12 +21,11 @@ function render() {
     uploadsAutoCollapsed = true;
     uploadsCollapsed = true;
   }
-  renderUploadsCtl();
   Q('#uploads').classList.toggle('collapsed', uploadsCollapsed);
   runValidation(activeTab);
   updateMeta();
-  renderTabs(loaded);
   renderWorkspaceHead();
+  renderUploadsCtl(loaded);
   renderPreflight();
   renderToolbar();
   renderTable();
@@ -29,12 +33,18 @@ function render() {
   updateBar();
 }
 
-function renderUploadsCtl() {
-  const loadedCount = Object.keys(TYPES).filter(t => S[t].loaded).length;
+function renderUploadsCtl(loaded = Object.keys(TYPES).filter(t => S[t].loaded)) {
+  const loadedCount = loaded.length;
   if (!loadedCount) { Q('#uploadsCtl').innerHTML = ''; return; }
-  const allLoaded = loadedCount === Object.keys(TYPES).length;
   const label = uploadsCollapsed ? 'Show upload cards' : 'Hide upload cards';
-  Q('#uploadsCtl').innerHTML = `<button class="uploads-toggle" id="uploadsToggle">${label}</button>`;
+  Q('#uploadsCtl').innerHTML = `
+<div class="top-rail">
+  <div class="top-rail-tabs" id="uploadsTabs"></div>
+  <div class="top-rail-actions">
+    <button class="uploads-toggle" id="uploadsToggle">${label}</button>
+  </div>
+</div>`;
+  renderTabs(loaded);
   Q('#uploadsToggle').addEventListener('click', () => {
     uploadsCollapsed = !uploadsCollapsed;
     if (!uploadsCollapsed) uploadsAutoCollapsed = true;
@@ -85,7 +95,16 @@ function updateMeta() {
 }
 
 function renderTabs(loaded) {
-  const el = Q('#tabs');
+  const inlineTabsHost = Q('#uploadsTabs');
+  const el = inlineTabsHost || Q('#tabs');
+  if (!el) return;
+  const legacyTabs = Q('#tabs');
+  if (legacyTabs && inlineTabsHost) {
+    legacyTabs.style.display = 'none';
+    legacyTabs.innerHTML = '';
+  } else if (legacyTabs) {
+    legacyTabs.style.display = loaded.length > 0 ? 'flex' : 'none';
+  }
   el.style.display = loaded.length > 0 ? 'flex' : 'none';
   el.innerHTML = loaded.map(t => {
     const c = TYPES[t]; const n = S[t].cur.length; const m = modCount(t);
@@ -109,10 +128,17 @@ function renderPreflight() {
   pf.warnings.forEach(x => lines.push(`<div class="pf-line warn">${SVG.warning} ${esc(x)}</div>`));
   crossWarnings.forEach(x => lines.push(`<div class="pf-line warn">${SVG.warning} ${esc(x)}</div>`));
   pf.infos.forEach(x => lines.push(`<div class="pf-line inf">${SVG.info} ${esc(x)}</div>`));
+  const syncToolbarPreflightState = hasLines => {
+    const toolbar = Q('#toolbar .toolbar');
+    if (!toolbar) return;
+    toolbar.classList.toggle('toolbar-linked', hasLines);
+    toolbar.classList.toggle('toolbar-standalone', !hasLines);
+  };
   if (v.errors) lines.push(`<div class="pf-line err">${SVG.error} Validation errors in editable cells: <strong>${v.errors}</strong></div>`);
   if (v.warnings) lines.push(`<div class="pf-line warn">${SVG.warning} Validation warnings in editable cells: <strong>${v.warnings}</strong></div>`);
   if (!lines.length) {
     Q('#preflight').innerHTML = '';
+    syncToolbarPreflightState(false);
     return;
   }
 
@@ -129,6 +155,7 @@ function renderPreflight() {
   <div class="pf-list">${lines.join('')}</div>
 </div>
   `;
+  syncToolbarPreflightState(true);
 }
 
 function getCrossEntityWarnings(type) {

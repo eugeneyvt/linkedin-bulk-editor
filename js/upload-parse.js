@@ -39,6 +39,102 @@ function loadFile(type, file) {
   r.readAsText(file, 'utf-16le');
 }
 
+function parseChooseFromList(raw) {
+  const txt = String(raw || '').replace(/\r/g, '');
+  const idx = txt.toLowerCase().indexOf('choose from');
+  if (idx === -1) return [];
+  const after = txt.slice(idx).replace(/^.*?choose from\s*:?/i, '');
+  const out = [];
+  const seen = new Set();
+  after.split(/[\n,]+/).forEach(part => {
+    const v = part.replace(/^"+|"+$/g, '').trim();
+    if (!v) return;
+    const n = v.toLowerCase();
+    if (seen.has(n)) return;
+    seen.add(n);
+    out.push(v);
+  });
+  return out;
+}
+
+function parseInstructionMax(raw, labelRe) {
+  const txt = String(raw || '').replace(/\r/g, '');
+  const re = new RegExp(`${labelRe.source}[^\\n]*?(?:character count maximum|use up to)\\s*:?\\s*(\\d+)`, 'i');
+  const m = txt.match(re);
+  if (!m) return null;
+  const n = Number(m[1]);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+function parseAdInstructionMeta(instructionRow, colToHeaderIndex) {
+  const meta = { statusOptions: [], ctaOptions: [], supportedAdFormats: [], adFieldLimits: {} };
+  const byKey = key => {
+    const idx = colToHeaderIndex[key];
+    return idx === undefined ? '' : (instructionRow[idx] || '');
+  };
+
+  meta.statusOptions = parseChooseFromList(byKey('adStatus'));
+  meta.ctaOptions = parseChooseFromList(byKey('callToAction'));
+
+  const adFormatCell = String(byKey('adFormat') || '');
+  if (/single image ad/i.test(adFormatCell)) meta.supportedAdFormats.push('Single image ad');
+  if (/text ad/i.test(adFormatCell)) meta.supportedAdFormats.push('Text ad');
+
+  const adNameCell = byKey('adContentName');
+  const introCell = byKey('introductory');
+  const headlineCell = byKey('headline');
+  const descriptionCell = byKey('description');
+
+  const singleImage = {};
+  const text = {};
+
+  singleImage.adContentName = parseInstructionMax(adNameCell, /single image ads?/i);
+  singleImage.introductory = parseInstructionMax(introCell, /single image ads?/i);
+  singleImage.headline = parseInstructionMax(headlineCell, /single image ads?/i);
+  singleImage.description = parseInstructionMax(descriptionCell, /single image ads?/i);
+  text.headline = parseInstructionMax(headlineCell, /text ads?/i);
+  text.description = parseInstructionMax(descriptionCell, /text ads?/i);
+
+  meta.adFieldLimits = { singleImage, text };
+  return meta;
+}
+
+function parseCampaignInstructionMeta(instructionRow, cfg, colToHeaderIndex) {
+  const idx = colToHeaderIndex[cfg.statusField];
+  const statusCell = idx === undefined ? '' : (instructionRow[idx] || '');
+  return {
+    statusOptions: parseChooseFromList(statusCell),
+    ctaOptions: [],
+    supportedAdFormats: [],
+    adFieldLimits: {},
+  };
+}
+
+function parseAdsetInstructionMeta(instructionRow, cfg, colToHeaderIndex) {
+  const idx = colToHeaderIndex[cfg.statusField];
+  const statusCell = idx === undefined ? '' : (instructionRow[idx] || '');
+  return {
+    statusOptions: parseChooseFromList(statusCell),
+    ctaOptions: [],
+    supportedAdFormats: [],
+    adFieldLimits: {},
+  };
+}
+
+function extractTemplateMeta(type, lines, hdrIdx, headerCells, cfg, colToHeaderIndex) {
+  const base = { instructionRow: [], statusOptions: [], ctaOptions: [], supportedAdFormats: [], adFieldLimits: {} };
+  if (hdrIdx <= 0 || !headerCells?.length) return base;
+  const preHeaderText = lines.slice(0, hdrIdx).join('\n');
+  const records = parseMultilineTSV(preHeaderText, headerCells.length);
+  if (!records.length) return base;
+  const instructionRow = records[records.length - 1].map(v => String(v || ''));
+  if (!instructionRow.length) return base;
+  if (type === 'ads') return { ...base, instructionRow, ...parseAdInstructionMeta(instructionRow, colToHeaderIndex) };
+  if (type === 'campaigns') return { ...base, instructionRow, ...parseCampaignInstructionMeta(instructionRow, cfg, colToHeaderIndex) };
+  if (type === 'adsets') return { ...base, instructionRow, ...parseAdsetInstructionMeta(instructionRow, cfg, colToHeaderIndex) };
+  return { ...base, instructionRow };
+}
+
 function parseFile(type, text) {
   const cfg = TYPES[type];
   const s = S[type];
@@ -51,7 +147,7 @@ function parseFile(type, text) {
     if (cells.length < 4) continue;
     const hasAccountHeader = cells.some(c => {
       const n = normalizeHeader(c);
-      return n === 'account id' || n === '*account id';
+      return n === 'account id';
     });
     if (hasAccountHeader) {
       hdrIdx = i;
@@ -69,20 +165,35 @@ function parseFile(type, text) {
 
   const colToHeaderIndex = {};
   const missingHeaders = [];
+  const requiredKeys = new Set(cfg.requiredKeys || cfg.cols.map(col => col.k));
+  const resolveColIdx = col => {
+    const headers = [col.csv, ...(Array.isArray(col.csvAliases) ? col.csvAliases : [])];
+    for (const hdr of headers) {
+      const idx = headerIndex[normalizeHeader(hdr)];
+      if (idx !== undefined) return idx;
+    }
+    return undefined;
+  };
   cfg.cols.forEach(col => {
-    const idx = headerIndex[normalizeHeader(col.csv)];
-    if (idx === undefined) missingHeaders.push(col.csv);
-    else colToHeaderIndex[col.k] = idx;
+    const idx = resolveColIdx(col);
+    if (idx === undefined) {
+      if (requiredKeys.has(col.k)) missingHeaders.push(col.csv);
+    } else {
+      colToHeaderIndex[col.k] = idx;
+    }
   });
   if (missingHeaders.length) {
     toast(`Wrong file type or outdated template: missing ${missingHeaders.length} columns`, 'err');
     return;
   }
 
+  const templateMeta = extractTemplateMeta(type, lines, hdrIdx, headerCells, cfg, colToHeaderIndex);
+
   s.hdrLines = lines.slice(0, hdrIdx);
   s.hdrRow = lines[hdrIdx];
   s.headerCells = headerCells;
   s.colToHeaderIndex = colToHeaderIndex;
+  s.templateMeta = templateMeta;
 
   const dataText = lines.slice(hdrIdx + 1).join('\n');
   const records = parseMultilineTSV(dataText, headerCells.length);
@@ -91,12 +202,12 @@ function parseFile(type, text) {
   s.cur = [];
   s.rawOrig = [];
   s.rawCur = [];
-  const statusSet = new Set(cfg.statusOpts);
-  const ctaSet = new Set(CTA_BASE);
+  const statusSet = new Set(templateMeta.statusOptions?.length ? templateMeta.statusOptions : cfg.statusOpts);
+  const ctaSet = new Set(templateMeta.ctaOptions?.length ? templateMeta.ctaOptions : CTA_BASE);
   const accountIdx = colToHeaderIndex.accountId;
 
   for (const fields of records) {
-    const raw = Array.from({ length: headerCells.length }, (_, i) => fields[i] ?? '');
+    const raw = Array.from({ length: headerCells.length }, (_, i) => sanitizeImportedCellValue(fields[i] ?? ''));
     if (!String(raw[accountIdx] || '').trim()) continue;
     const row = {};
     cfg.cols.forEach(col => {
@@ -126,9 +237,14 @@ function parseFile(type, text) {
     ? s.visibleCols.filter(k => defaultVisible.includes(k))
     : defaultVisible;
   if (!s.visibleCols.length) s.visibleCols = defaultVisible;
+  s.pinnedCols = Array.isArray(s.pinnedCols) && s.pinnedCols.length
+    ? s.pinnedCols.filter(k => defaultVisible.includes(k))
+    : [];
   if (!s.density) s.density = 'comfortable';
   s.focusRow = null;
   s.issueCursor = 0;
+  s.tableScrollLeft = 0;
+  s.tableScrollTop = 0;
 
   runStaticPreflight(type);
   runValidation(type);
@@ -155,6 +271,7 @@ function clearFile(type) {
   s.cur = [];
   s.rawOrig = [];
   s.rawCur = [];
+  s.templateMeta = { instructionRow: [], statusOptions: [], ctaOptions: [], supportedAdFormats: [], adFieldLimits: {} };
   s.loaded = false;
   s.sel = new Set();
   s.focusRow = null;
@@ -164,6 +281,9 @@ function clearFile(type) {
   s.validation = { errors: 0, warnings: 0, cellIssues: new Map(), rowsWithIssues: new Set() };
   s.sortKey = null;
   s.sortDir = 'asc';
+  s.pinnedCols = [];
+  s.tableScrollLeft = 0;
+  s.tableScrollTop = 0;
 
   const card = Q(`#uc-${type}`);
   card.classList.remove('loaded');
@@ -244,8 +364,15 @@ function normalizeHeader(s) {
   return String(s || '')
     .replace(/^\uFEFF/, '')
     .replace(/^"+|"+$/g, '')
+    .replace(/^\*+/, '')
     .trim()
     .replace(/\s+/g, ' ')
     .toLowerCase();
 }
 
+function sanitizeImportedCellValue(v) {
+  return String(v || '')
+    .replace(/\uFEFF/g, '')
+    .replace(/[\u200B-\u200D\u2060]/g, '')
+    .replace(/^\uFFFD+/, '');
+}

@@ -3,11 +3,53 @@
   border: 1px solid rgba(66, 84, 102, 0.18);
   border-top: none;
   border-radius: 0 0 14px 14px;
-  overflow: auto;
+  overflow: hidden;
   flex: 1;
   min-height: 0;
   background: var(--bg-elevated);
   box-shadow: 0 12px 22px rgba(15, 23, 42, 0.07);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  --h-scroll-start: 32px;
+}
+
+.table-head-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none;
+}
+
+.table-head-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.table-body-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.table-xscroll {
+  position: absolute;
+  left: var(--h-scroll-start, 0px);
+  right: 0;
+  bottom: 0;
+  height: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--bg-elevated);
+  z-index: 8;
+}
+
+.table-xscroll.off {
+  display: none;
+}
+
+.table-xscroll-inner {
+  height: 1px;
 }
 
 .table-container.compact tbody td {
@@ -23,14 +65,13 @@
 table {
   width: max-content;
   min-width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 13px;
 }
 
 thead {
-  position: sticky;
-  top: 0;
-  z-index: 3;
+  position: static;
 }
 
 thead th {
@@ -43,11 +84,12 @@ thead th {
   text-transform: uppercase;
   letter-spacing: 0.3px;
   color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
+  border-bottom: none;
   white-space: normal;
   word-wrap: break-word;
   user-select: none;
   position: relative;
+  z-index: 5;
   min-width: 60px;
 }
 
@@ -90,6 +132,39 @@ thead th .sort-arrow {
   vertical-align: middle;
 }
 
+.pin-col-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-faint);
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 1;
+  padding: 1px 3px;
+  margin-left: 4px;
+  cursor: pointer;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pin-col-btn svg {
+  width: 10px;
+  height: 10px;
+}
+
+.pin-col-btn:hover {
+  color: var(--li-blue);
+  border-color: color-mix(in srgb, var(--li-blue) 40%, transparent);
+  background: color-mix(in srgb, var(--li-blue) 8%, transparent);
+}
+
+.pin-col-btn.on {
+  color: var(--li-blue);
+  border-color: color-mix(in srgb, var(--li-blue) 45%, transparent);
+  background: color-mix(in srgb, var(--li-blue) 12%, transparent);
+}
+
 thead th.sort-asc .sort-arrow,
 thead th.sort-desc .sort-arrow {
   color: var(--li-blue);
@@ -103,6 +178,7 @@ tbody td {
 }
 
 tbody tr {
+  background: var(--bg-elevated);
   transition: background 0.1s;
 }
 
@@ -128,31 +204,77 @@ tbody tr.mod.issue {
 }
 
 tbody tr.focus {
-  outline: 2px solid color-mix(in srgb, var(--li-blue) 55%, transparent);
-  outline-offset: -2px;
+  outline: none;
 }
 
-thead th:first-child,
+tbody tr.focus td {
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent);
+}
+
+tbody tr.focus td.pin-col {
+  position: sticky;
+}
+
+tbody tr.focus td:first-child {
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--li-blue) 55%, transparent), inset 0 1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent);
+}
+
+tbody tr.focus td:last-child {
+  box-shadow: inset -2px 0 0 color-mix(in srgb, var(--li-blue) 55%, transparent), inset 0 1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent);
+}
+
+thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 12;
+  background: var(--bg-header);
+}
+
 tbody td:first-child {
   position: sticky;
   left: 0;
   z-index: 4;
-  background: var(--bg-elevated);
+  background: inherit;
 }
 
-thead th:first-child {
-  z-index: 6;
+thead th.pin-col {
+  position: sticky;
+  background: var(--bg-header);
+  z-index: 11;
 }
 
-tbody tr:nth-child(even) td:first-child {
-  background: color-mix(in srgb, var(--bg-elevated) 92%, var(--bg-header) 8%);
+tbody td.pin-col {
+  position: sticky;
+  background: inherit;
 }
 
-tbody tr:hover td:first-child {
-  background: var(--bg-hover);
+thead th.pin-col-shadow,
+tbody td.pin-col-shadow {
+  box-shadow: 1px 0 0 var(--border), 8px 0 12px color-mix(in srgb, var(--shadow) 18%, transparent);
 }
 
-tbody tr.mod td:first-child {
-  background: var(--warning-bg);
+tbody tr.focus td.pin-col-shadow {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent),
+    1px 0 0 var(--border),
+    8px 0 12px color-mix(in srgb, var(--shadow) 18%, transparent);
 }
 
+tbody tr.focus td.pin-col-shadow:first-child {
+  box-shadow:
+    inset 2px 0 0 color-mix(in srgb, var(--li-blue) 55%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent),
+    1px 0 0 var(--border),
+    8px 0 12px color-mix(in srgb, var(--shadow) 18%, transparent);
+}
+
+tbody tr.focus td.pin-col-shadow:last-child {
+  box-shadow:
+    inset -2px 0 0 color-mix(in srgb, var(--li-blue) 55%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--li-blue) 55%, transparent),
+    1px 0 0 var(--border),
+    8px 0 12px color-mix(in srgb, var(--shadow) 18%, transparent);
+}

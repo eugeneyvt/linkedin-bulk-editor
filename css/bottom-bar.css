@@ -1,9 +1,18 @@
 /* ===== BOTTOM BAR ===== */
+body {
+  padding-bottom: 0;
+  transition: padding-bottom 0.25s ease;
+}
+
+body.bar-open {
+  padding-bottom: 68px;
+}
+
 .bar {
   position: fixed;
   bottom: 0;
   left: 50%;
-  width: min(1280px, calc(100% - 26px));
+  width: min(1520px, calc(100% - 36px));
   transform: translate(-50%, 112%);
   background: linear-gradient(125deg, var(--bg-elevated) 0%, color-mix(in srgb, var(--bg-elevated) 85%, var(--li-blue-light) 15%) 100%);
   border: 1px solid rgba(10, 102, 194, 0.25);
@@ -46,4 +55,3 @@
   display: flex;
   gap: 6px;
 }
-

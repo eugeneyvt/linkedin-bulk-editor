@@ -2,10 +2,9 @@
 .toolbar {
   background: var(--bg-elevated);
   border: 1px solid rgba(66, 84, 102, 0.18);
-  border-top: none;
-  padding: 10px 14px;
+  padding: 7px 10px;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
   flex-wrap: wrap;
   overflow: visible;
@@ -13,13 +12,22 @@
   z-index: 10;
 }
 
+.toolbar-linked {
+  border-top: none;
+  border-radius: 0;
+}
+
+.toolbar-standalone {
+  border-radius: 12px 12px 0 0;
+}
+
 .search {
   flex: 1;
   min-width: 160px;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 12px;
+  border-radius: 8px;
+  font-size: 11px;
   outline: none;
   background: var(--bg-input);
   color: var(--text);
@@ -32,12 +40,12 @@
 }
 
 .pill {
-  padding: 5px 12px;
+  padding: 4px 9px;
   border: 1px solid var(--border);
   border-radius: 20px;
   background: var(--bg-elevated);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   color: var(--text-muted);
@@ -63,14 +71,32 @@
 
 .toolbar-group {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   align-items: center;
   flex-shrink: 0;
 }
 
+.toolbar-spacer {
+  flex: 1 1 auto;
+  min-width: 8px;
+}
+
+.toolbar-group-display {
+  justify-content: flex-end;
+}
+
+.toolbar-cols-dd {
+  display: inline-flex;
+  align-items: center;
+}
+
+.toolbar-cols-dd>.btn {
+  height: 24px;
+}
+
 .toolbar-sep {
   width: 1px;
-  height: 20px;
+  height: 16px;
   background: var(--border);
   flex-shrink: 0;
 }
@@ -114,6 +140,23 @@
 .btn-sm {
   padding: 3px 8px;
   font-size: 11px;
+  line-height: 1.2;
+}
+
+.btn-icon {
+  width: 28px;
+  min-width: 28px;
+  padding: 3px 0;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn:focus-visible,
@@ -123,4 +166,3 @@
   outline: 2px solid var(--li-blue);
   outline-offset: 1px;
 }
-

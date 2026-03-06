@@ -1,33 +1,47 @@
 /* ===== SCROLLBAR STYLING ===== */
-.table-container::-webkit-scrollbar,
+.table-body-wrap::-webkit-scrollbar,
+.table-xscroll::-webkit-scrollbar,
 #inspectorZone::-webkit-scrollbar,
+.ins-scroll::-webkit-scrollbar,
 .dd-menu::-webkit-scrollbar,
 .modal::-webkit-scrollbar,
 .json-tree::-webkit-scrollbar,
 .aud-builder::-webkit-scrollbar,
+.aud-bulk-preview::-webkit-scrollbar,
 .text-modal textarea::-webkit-scrollbar,
 textarea.ins-field::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-.table-container::-webkit-scrollbar-track,
+.table-body-wrap::-webkit-scrollbar-track,
+.table-xscroll::-webkit-scrollbar-track,
 #inspectorZone::-webkit-scrollbar-track,
+.ins-scroll::-webkit-scrollbar-track,
 .dd-menu::-webkit-scrollbar-track,
 .modal::-webkit-scrollbar-track,
 .json-tree::-webkit-scrollbar-track,
 .aud-builder::-webkit-scrollbar-track,
+.aud-bulk-preview::-webkit-scrollbar-track,
 .text-modal textarea::-webkit-scrollbar-track,
 textarea.ins-field::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.table-container::-webkit-scrollbar-thumb,
+.table-xscroll::-webkit-scrollbar-track,
+.table-xscroll::-webkit-scrollbar-corner {
+  background: var(--bg-elevated);
+}
+
+.table-body-wrap::-webkit-scrollbar-thumb,
+.table-xscroll::-webkit-scrollbar-thumb,
 #inspectorZone::-webkit-scrollbar-thumb,
+.ins-scroll::-webkit-scrollbar-thumb,
 .dd-menu::-webkit-scrollbar-thumb,
 .modal::-webkit-scrollbar-thumb,
 .json-tree::-webkit-scrollbar-thumb,
 .aud-builder::-webkit-scrollbar-thumb,
+.aud-bulk-preview::-webkit-scrollbar-thumb,
 .text-modal textarea::-webkit-scrollbar-thumb,
 textarea.ins-field::-webkit-scrollbar-thumb {
   background: rgba(120, 130, 145, 0.35);
@@ -36,38 +50,50 @@ textarea.ins-field::-webkit-scrollbar-thumb {
   background-clip: content-box;
 }
 
-.table-container::-webkit-scrollbar-thumb:hover,
+.table-body-wrap::-webkit-scrollbar-thumb:hover,
+.table-xscroll::-webkit-scrollbar-thumb:hover,
 #inspectorZone::-webkit-scrollbar-thumb:hover,
+.ins-scroll::-webkit-scrollbar-thumb:hover,
 .dd-menu::-webkit-scrollbar-thumb:hover,
 .modal::-webkit-scrollbar-thumb:hover,
 .json-tree::-webkit-scrollbar-thumb:hover,
 .aud-builder::-webkit-scrollbar-thumb:hover,
+.aud-bulk-preview::-webkit-scrollbar-thumb:hover,
 .text-modal textarea::-webkit-scrollbar-thumb:hover,
 textarea.ins-field::-webkit-scrollbar-thumb:hover {
   background: rgba(120, 130, 145, 0.55);
   background-clip: content-box;
 }
 
-.table-container::-webkit-scrollbar-corner,
+.table-body-wrap::-webkit-scrollbar-corner,
 #inspectorZone::-webkit-scrollbar-corner,
+.ins-scroll::-webkit-scrollbar-corner,
 .json-tree::-webkit-scrollbar-corner,
 .aud-builder::-webkit-scrollbar-corner,
+.aud-bulk-preview::-webkit-scrollbar-corner,
 .text-modal textarea::-webkit-scrollbar-corner,
 textarea.ins-field::-webkit-scrollbar-corner {
   background: transparent;
 }
 
 /* Firefox scrollbar styling */
-.table-container,
+.table-body-wrap,
+.table-xscroll,
 #inspectorZone,
+.ins-scroll,
 .dd-menu,
 .modal,
 .json-tree,
 .aud-builder,
+.aud-bulk-preview,
 .text-modal textarea,
 textarea.ins-field {
   scrollbar-width: thin;
   scrollbar-color: rgba(120, 130, 145, 0.35) transparent;
+}
+
+.table-xscroll {
+  scrollbar-color: rgba(120, 130, 145, 0.35) var(--bg-elevated);
 }
 
 /* ===== ACCESSIBILITY ===== */

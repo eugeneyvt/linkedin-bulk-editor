@@ -1,17 +1,23 @@
 function renderToolbar() {
   const t = activeTab; const s = S[t]; const c = TYPES[t];
+  const hasPreflight = !!Q('#preflight') && !!Q('#preflight').innerHTML.trim();
   const allVisibleCols = c.cols.filter(col => !col.hide);
   if (!s.visibleCols || !s.visibleCols.length) s.visibleCols = allVisibleCols.map(col => col.k);
   const visibleSet = new Set(s.visibleCols);
+  const canCreate = typeof canCreateBulkEntries === 'function' ? canCreateBulkEntries(t) : false;
+  const duplicateSources = canCreate && typeof getDuplicateSourceIndices === 'function' ? getDuplicateSourceIndices(t) : [];
+  const canDuplicate = canCreate && duplicateSources.length > 0;
+  const removableNew = canCreate && typeof getRemovableNewEntryIndices === 'function' ? getRemovableNewEntryIndices(t) : [];
+  const canDeleteNew = canCreate && removableNew.length > 0;
+  const densityGlyph = s.density === 'compact' ? '▦' : '▤';
+  const densityTitle = s.density === 'compact' ? 'Switch to comfortable density' : 'Switch to compact density';
   const vmCounts = {
     all: s.cur.length,
     modified: modCount(t),
     issues: s.validation.rowsWithIssues.size
   };
   const statuses = ['all', ...new Set(s.cur.map(r => r[c.statusField]).filter(Boolean))];
-  const filtered = getFiltered(t);
-  const filteredCount = filtered.length;
-  Q('#toolbar').innerHTML = `<div class="toolbar">
+  Q('#toolbar').innerHTML = `<div class="toolbar ${hasPreflight ? 'toolbar-linked' : 'toolbar-standalone'}">
 <input class="search" placeholder="Search ${c.label.toLowerCase()}..." value="${esc(s.search)}" id="searchInp" aria-label="Search ${c.label.toLowerCase()}">
 <div class="toolbar-sep"></div>
 <div class="toolbar-group">
@@ -23,21 +29,20 @@ function renderToolbar() {
 </div>
 <div class="toolbar-sep"></div>
 <div class="toolbar-group">
-  <button class="btn btn-s btn-sm" id="densityBtn">${s.density === 'compact' ? 'Density: Compact' : 'Density: Comfortable'}</button>
-  <div class="dd">
+  <button class="btn btn-s btn-sm" id="addEntryBtn" ${canCreate ? '' : 'disabled'} title="${canCreate ? 'Add a new entry row' : 'LinkedIn bulk supports creating only Campaigns and Ad Sets'}">+ Add New</button>
+  <button class="btn btn-s btn-sm" id="dupEntryBtn" ${canDuplicate ? '' : 'disabled'} title="${canCreate ? 'Duplicate selected/focused row as a new entry' : 'LinkedIn bulk supports creating only Campaigns and Ad Sets'}">Duplicate</button>
+  <button class="btn btn-s btn-sm" id="delNewEntryBtn" ${canDeleteNew ? '' : 'disabled'} title="${canCreate ? 'Delete selected/focused newly added rows' : 'LinkedIn bulk supports creating only Campaigns and Ad Sets'}">Delete New</button>
+  <button class="btn btn-s btn-sm" id="fnrToggle">${SVG.search} Find & Replace</button>
+</div>
+<div class="toolbar-spacer"></div>
+<div class="toolbar-group toolbar-group-display">
+  <button class="btn btn-s btn-sm btn-icon" id="densityBtn" title="${densityTitle}" aria-label="${densityTitle}">${densityGlyph}</button>
+  <div class="dd toolbar-cols-dd">
     <button class="btn btn-s btn-sm" id="colsBtn">Columns ▾</button>
     <div class="dd-menu" id="colsMenu">
       ${allVisibleCols.map(col => `<div class="dd-item" data-col="${col.k}">${visibleSet.has(col.k) ? '☑' : '☐'} ${esc(col.h)}</div>`).join('')}
     </div>
   </div>
-  <button class="btn btn-s btn-sm" id="nextIssue">${SVG.warning} Next issue</button>
-  <button class="btn btn-s btn-sm" id="fnrToggle">${SVG.search} Find & Replace</button>
-</div>
-<div class="toolbar-sep"></div>
-<div class="toolbar-group">
-  <button class="btn btn-s btn-sm" id="selFiltered">✓ Select filtered (${filteredCount})</button>
-  <button class="btn btn-s btn-sm" id="clearSel">✕ Clear selection</button>
-
 </div>
   </div>`;
 
@@ -49,22 +54,29 @@ function renderToolbar() {
   Q('#toolbar').querySelectorAll('[data-f]').forEach(p => p.addEventListener('click', () => { s.filter = p.dataset.f; render(); }));
   Q('#toolbar').querySelectorAll('[data-vm]').forEach(p => p.addEventListener('click', () => { s.viewMode = p.dataset.vm; render(); }));
   Q('#fnrToggle').addEventListener('click', () => toggleFnR());
-  Q('#selFiltered').addEventListener('click', () => { filtered.forEach(({ i }) => s.sel.add(i)); render(); });
-  Q('#clearSel').addEventListener('click', () => { s.sel = new Set(); render(); });
+  Q('#addEntryBtn').addEventListener('click', () => {
+    if (typeof addNewEntry === 'function') addNewEntry(t);
+  });
+  Q('#dupEntryBtn').addEventListener('click', () => {
+    if (typeof duplicateEntry === 'function') duplicateEntry(t, duplicateSources);
+  });
+  Q('#delNewEntryBtn').addEventListener('click', () => {
+    if (typeof deleteNewEntries === 'function') deleteNewEntries(t, removableNew);
+  });
   Q('#densityBtn').addEventListener('click', () => {
     s.density = s.density === 'compact' ? 'comfortable' : 'compact';
     renderToolbar();
     renderTable();
     renderInspector();
   });
-  Q('#nextIssue').addEventListener('click', () => jumpToNextIssue(t));
 
   const colsBtn = Q('#colsBtn');
   const colsMenu = Q('#colsMenu');
   colsBtn.addEventListener('click', () => toggleDropdown(colsBtn, colsMenu));
   colsMenu.querySelectorAll('.dd-item').forEach(it => it.addEventListener('click', () => {
     const k = it.dataset.col;
-    if (visibleSet.has(k)) {
+    const isVisible = s.visibleCols.includes(k);
+    if (isVisible) {
       if (s.visibleCols.length === 1) {
         toast('At least one column must remain visible', 'inf');
         return;
@@ -73,7 +85,8 @@ function renderToolbar() {
     } else {
       s.visibleCols = [...s.visibleCols, k];
     }
-    renderToolbar();
+    const col = allVisibleCols.find(c => c.k === k);
+    it.textContent = `${s.visibleCols.includes(k) ? '☑' : '☐'} ${col ? col.h : k}`;
     renderTable();
     renderInspector();
   }));

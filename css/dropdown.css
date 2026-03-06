@@ -1,7 +1,9 @@
 /* ===== DROPDOWN ===== */
 .dd {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
 }
 
 .dd-menu {
@@ -11,6 +13,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 14px var(--shadow-strong);
   min-width: 180px;
+  max-width: min(420px, calc(100vw - 16px));
   z-index: 999;
   display: none;
   max-height: 360px;
@@ -36,4 +39,3 @@
 .dd-item:hover {
   background: var(--bg-hover);
 }
-

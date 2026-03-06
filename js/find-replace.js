@@ -90,6 +90,7 @@ function doFind() {
   for (let i = 0; i < s.cur.length; i++) {
     let rowHit = false;
     for (const col of cols) {
+      if (!isCellEditable(activeTab, s.cur[i], col.k)) continue;
       const v = s.cur[i][col.k] || '';
       const matches = v.match(regex);
       if (matches) { matchCount += matches.length; rowHit = true; }
@@ -111,6 +112,7 @@ function doReplaceAll() {
   for (let i = 0; i < s.cur.length; i++) {
     let rowHit = false;
     for (const col of cols) {
+      if (!isCellEditable(activeTab, s.cur[i], col.k)) continue;
       const v = s.cur[i][col.k] || '';
       // We need a fresh regex each time since 'g' flag is stateful
       const re = new RegExp(regex.source, regex.flags);

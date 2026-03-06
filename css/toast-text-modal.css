@@ -94,6 +94,23 @@
   border-color: var(--li-blue);
 }
 
+.text-modal textarea.over-limit {
+  border-color: color-mix(in srgb, var(--danger) 62%, var(--border) 38%);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--danger) 14%, transparent);
+}
+
+.text-modal .tm-char-count {
+  margin-top: 6px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.text-modal .tm-char-count.over {
+  color: var(--danger);
+  font-weight: 700;
+}
+
 .text-modal .btns {
   display: flex;
   gap: 6px;

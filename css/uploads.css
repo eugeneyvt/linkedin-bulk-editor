@@ -1,9 +1,30 @@
 /* ===== UPLOAD ZONE ===== */
 .uploads-ctl {
-  display: flex;
-  justify-content: flex-end;
+  display: block;
   margin-bottom: 6px;
+  min-height: 34px;
+}
+
+.top-rail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   min-height: 30px;
+}
+
+.top-rail-tabs {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding: 1px 2px;
+}
+
+.top-rail-actions {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
 }
 
 .uploads-toggle {
@@ -20,6 +41,25 @@
 .uploads-toggle:hover {
   border-color: var(--li-blue);
   color: var(--li-blue);
+}
+
+@media (max-width: 900px) {
+  .top-rail {
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .top-rail-tabs {
+    width: 100%;
+    order: 2;
+  }
+
+  .top-rail-actions {
+    order: 1;
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
 
 .uploads {
@@ -113,4 +153,3 @@
   cursor: pointer;
   text-decoration: underline;
 }
-

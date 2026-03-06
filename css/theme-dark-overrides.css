@@ -91,6 +91,11 @@
     border-bottom-color: #3d4b5e;
   }
 
+  thead th:first-child,
+  thead th.pin-col {
+    background: #2a3442;
+  }
+
   tbody td {
     border-bottom-color: #303a48;
     color: #d9e3f0;
@@ -102,6 +107,12 @@
 
   tbody tr:hover {
     background: #2b3645;
+  }
+
+  /* Keep modified-row highlight visible for both odd/even rows in dark mode */
+  tbody tr.mod,
+  tbody tr.mod:nth-child(even) {
+    background: var(--warning-bg);
   }
 
   .bar {

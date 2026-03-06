@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="css/modal.css">
   <link rel="stylesheet" href="css/toast-text-modal.css">
   <link rel="stylesheet" href="css/audience-builder.css">
+  <link rel="stylesheet" href="css/audience-bulk.css">
   <link rel="stylesheet" href="css/json-tree-base.css">
   <link rel="stylesheet" href="css/json-tree-controls.css">
   <link rel="stylesheet" href="css/json-tree-dark.css">
@@ -56,9 +57,11 @@
     <div class="tabs" id="tabs" style="display:none"></div>
     <div id="workspaceHead"></div>
     <div id="preflight"></div>
-    <div id="toolbar"></div>
     <div class="workspace" id="workspace" style="display:none">
-      <div id="tableZone"></div>
+      <div class="workspace-main">
+        <div id="toolbar"></div>
+        <div id="tableZone"></div>
+      </div>
       <aside id="inspectorZone"></aside>
     </div>
   </div>
@@ -69,6 +72,7 @@
     </div>
     <div class="right">
       <button class="btn btn-s" id="barReview">Review</button>
+      <button class="btn btn-s" id="barRevertSelected" disabled>Revert Selected</button>
       <button class="btn btn-s" id="barRevert">Revert All</button>
       <div class="dd">
         <button class="btn btn-p" id="barExport"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -117,8 +121,60 @@
       <div id="tmBuilderView" class="aud-builder" style="display:none;"></div>
       <div id="tmJsonView" class="json-tree" style="display:none;"></div>
       <textarea id="tmArea"></textarea>
+      <div class="tm-char-count" id="tmCharCount" style="display:none;"></div>
       <div class="btns"><button class="btn btn-s" id="tmCancel">Cancel</button><button class="btn btn-p"
           id="tmSave">Save</button></div>
+    </div>
+  </div>
+  <div class="modal-bg" id="audBulkModal">
+    <div class="modal aud-bulk-modal">
+      <h2>Audience Bulk Editor (Ad Sets)</h2>
+      <div class="aud-bulk-subtitle">Apply add/remove operations for audience filters across selected ad sets with
+        readable per-row preview.</div>
+      <div class="aud-bulk-form">
+        <label class="aud-bulk-field">
+          <span>Operation</span>
+          <select id="abOp" class="c-in">
+            <option value="add">Add values</option>
+            <option value="remove">Remove values</option>
+          </select>
+        </label>
+        <label class="aud-bulk-field">
+          <span>Section</span>
+          <select id="abSection" class="c-in">
+            <option value="include">Include</option>
+            <option value="exclude">Exclude</option>
+          </select>
+        </label>
+        <label class="aud-bulk-field">
+          <span>Logic</span>
+          <select id="abLogic" class="c-in">
+            <option value="or">OR</option>
+            <option value="and">AND</option>
+          </select>
+        </label>
+        <label class="aud-bulk-field aud-bulk-field-wide">
+          <span>Facet</span>
+          <select id="abFacet" class="c-in"></select>
+          <input id="abFacetCustom" class="c-in" type="text" placeholder="urn:li:adTargetingFacet:..." style="display:none;">
+        </label>
+        <label class="aud-bulk-field aud-bulk-field-wide">
+          <span>Values (comma or new line separated)</span>
+          <textarea id="abValues" class="ins-field" rows="3"
+            placeholder="urn:li:title:12345, urn:li:title:67890&#10;or labels like Female / 25-34 for supported facets"></textarea>
+        </label>
+      </div>
+      <div class="aud-bulk-note" id="abNote"></div>
+      <div class="aud-bulk-preview-head">
+        <h3>Preview</h3>
+        <div id="abSummary"></div>
+      </div>
+      <div class="aud-bulk-preview" id="abPreviewList"></div>
+      <div class="btns">
+        <button class="btn btn-s" id="abCancel">Close</button>
+        <button class="btn btn-s" id="abPreviewBtn">Refresh Preview</button>
+        <button class="btn btn-p" id="abApplyBtn">Apply Changes</button>
+      </div>
     </div>
   </div>
   <div class="toast" id="toast"></div>
@@ -161,12 +217,14 @@
   <script src="js/utils.js"></script>
   <script src="js/upload-parse.js"></script>
   <script src="js/validation.js"></script>
+  <script src="js/row-create-duplicate.js"></script>
   <script src="js/render-core.js"></script>
   <script src="js/toolbar.js"></script>
   <script src="js/table-view.js"></script>
   <script src="js/inspector.js"></script>
   <script src="js/tab-badges.js"></script>
   <script src="js/modal-json.js"></script>
+  <script src="js/audience-bulk.js"></script>
   <script src="js/actions.js"></script>
   <script src="js/resize.js"></script>
   <script src="js/find-replace.js"></script>

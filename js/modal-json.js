@@ -67,6 +67,36 @@ let tmViewMode = 'raw';
 let tmJsonMode = false;
 let tmParsedJson = null;
 
+function getTmFieldLimit(type, idx, key) {
+  const row = S[type]?.cur?.[idx];
+  if (!type || row === undefined || !key) return null;
+  if (typeof getFieldLengthLimit === 'function') {
+    const n = Number(getFieldLengthLimit(type, S[type], row, key));
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  const fallback = Number(FIELD_LENGTH_LIMITS?.[key]);
+  return Number.isFinite(fallback) && fallback > 0 ? fallback : null;
+}
+
+function refreshTmCounter() {
+  const counter = Q('#tmCharCount');
+  const area = Q('#tmArea');
+  if (!counter || !area) return;
+  const limit = Number(tmState.limit || 0);
+  const rawVisible = area.style.display !== 'none';
+  if (!limit || !rawVisible) {
+    counter.style.display = 'none';
+    counter.classList.remove('over');
+    area.classList.remove('over-limit');
+    return;
+  }
+  const len = String(area.value || '').length;
+  counter.style.display = '';
+  counter.textContent = `${len}/${limit}`;
+  counter.classList.toggle('over', len > limit);
+  area.classList.toggle('over-limit', len > limit);
+}
+
 function collectCollapsedNodePaths(container) {
   const collapsed = new Set();
   if (!container) return collapsed;
@@ -690,10 +720,12 @@ function setTmView(mode) {
   if (isPretty && tmParsedJson) renderModalTree();
   if (isBuilder && tmParsedJson) renderAudienceBuilder();
   if (isRaw && tmParsedJson) syncRawFromParsed(true);
+  refreshTmCounter();
 }
 
 function openTextModal(type, idx, key, header) {
-  tmState = { type, idx, key };
+  const limit = getTmFieldLimit(type, idx, key);
+  tmState = { type, idx, key, limit };
   Q('#tmTitle').textContent = `Edit: ${header}`;
   const rawVal = S[type].cur[idx][key] || '';
   Q('#tmArea').value = rawVal;
@@ -721,6 +753,7 @@ function openTextModal(type, idx, key, header) {
 
   Q('#textModal').querySelector('.text-modal').classList.toggle('json-wide', isJson);
   Q('#textModal').classList.add('open');
+  refreshTmCounter();
   if (!isJson) Q('#tmArea').focus();
 }
 
@@ -739,6 +772,9 @@ Q('#tmBtnRaw').addEventListener('click', () => {
   setTmView('raw');
   Q('#tmArea').focus();
 });
+
+Q('#tmArea').addEventListener('input', refreshTmCounter);
+Q('#tmArea').addEventListener('change', refreshTmCounter);
 
 Q('#tmCancel').addEventListener('click', () => Q('#textModal').classList.remove('open'));
 
