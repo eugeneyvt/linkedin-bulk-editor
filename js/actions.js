@@ -23,29 +23,34 @@ function updateBar() {
     revSelBtn.disabled = selectedInActive === 0;
   }
 
-  // Export menu: modified exports + selected exports
-  const modItems = Object.keys(TYPES).filter(t => S[t].loaded && modCount(t) > 0).map(t =>
-    `<div class="dd-item" data-et="${t}" data-scope="modified">${SVG.download} ${TYPES[t].label} (${modCount(t)} changes)</div>`
-  );
-  const selItems = Object.keys(TYPES).filter(t => S[t].loaded && S[t].sel.size > 0).map(t =>
-    `<div class="dd-item" data-et="${t}" data-scope="selected">${SVG.download} ${TYPES[t].label} (selected ${S[t].sel.size})</div>`
-  );
+  const exportMenu = Q('#exportMenu');
+  if (exportMenu) {
+    const exportType = activeTab && S[activeTab]?.loaded ? activeTab : null;
+    let menuHtml = '';
+    if (!exportType) {
+      menuHtml = '<div class="dd-item" style="opacity:0.6;pointer-events:none">No active file to export</div>';
+    } else {
+      const cfg = TYPES[exportType];
+      const rowTotal = S[exportType].cur.length;
+      const selectedCount = getSelectedIndices(exportType).length;
+      const modifiedCount = getModifiedIndices(exportType).length;
+      menuHtml = [
+        `<div class="dd-item" data-et="${exportType}" data-scope="all">${SVG.download} Export ${cfg.label} file (${rowTotal} rows)</div>`,
+        selectedCount
+          ? `<div class="dd-item" data-et="${exportType}" data-scope="selected">${SVG.download} Export Selected Rows (${selectedCount})</div>`
+          : '<div class="dd-item" style="opacity:0.6;pointer-events:none">Export Selected Rows (0)</div>',
+        modifiedCount
+          ? `<div class="dd-item" data-et="${exportType}" data-scope="modified">${SVG.download} Export Modified Rows (${modifiedCount})</div>`
+          : '<div class="dd-item" style="opacity:0.6;pointer-events:none">Export Modified Rows (0)</div>'
+      ].join('');
+    }
 
-  let menuHtml = '';
-  if (modItems.length) {
-    menuHtml += modItems.join('');
-    menuHtml += `<div class="dd-item" data-et="all" data-scope="modified" style="font-weight:600">${SVG.download} Export All Modified</div>`;
+    exportMenu.innerHTML = menuHtml;
+    exportMenu.querySelectorAll('.dd-item[data-et]').forEach(it => it.addEventListener('click', () => {
+      exportMenu.classList.remove('open');
+      exportFiles(it.dataset.et, it.dataset.scope || 'all');
+    }));
   }
-  if (selItems.length) {
-    if (menuHtml) menuHtml += '<div class="dd-item" style="height:1px;padding:0;margin:4px 8px;background:var(--border-light);pointer-events:none"></div>';
-    menuHtml += selItems.join('');
-  }
-  if (!menuHtml) menuHtml = '<div class="dd-item" style="opacity:0.6;pointer-events:none">Nothing to export</div>';
-  Q('#exportMenu').innerHTML = menuHtml;
-  Q('#exportMenu').querySelectorAll('.dd-item[data-et]').forEach(it => it.addEventListener('click', () => {
-    Q('#exportMenu').classList.remove('open');
-    exportFiles(it.dataset.et, it.dataset.scope || 'modified');
-  }));
 }
 
 Q('#barExport').addEventListener('click', () => toggleDropdown(Q('#barExport'), Q('#exportMenu')));
@@ -70,12 +75,11 @@ Q('#barRevertSelected').addEventListener('click', () => {
     toast('No selected rows', 'inf');
     return;
   }
-  const changed = selected.filter(i => isModified(activeTab, i));
-  if (!changed.length) {
+  const reverted = revertRows(activeTab, selected);
+  if (!reverted) {
     toast('Selected rows have no changes', 'inf');
     return;
   }
-  const reverted = revertRows(activeTab, changed);
   runValidation(activeTab);
   renderPreflight();
   renderTable();
@@ -134,7 +138,7 @@ function showReview() {
   Q('#reviewModal').classList.add('open');
 }
 Q('#reviewModal').addEventListener('click', e => { if (e.target.id === 'reviewModal') e.target.classList.remove('open'); });
-Q('#reviewExport').addEventListener('click', () => { Q('#reviewModal').classList.remove('open'); exportFiles('all', 'modified'); });
+Q('#reviewExport').addEventListener('click', () => { Q('#reviewModal').classList.remove('open'); exportFiles(activeTab, 'modified'); });
 
 /* ===== EXPORT ===== */
 function getSelectedIndices(type) {
@@ -143,13 +147,27 @@ function getSelectedIndices(type) {
     .sort((a, b) => a - b);
 }
 
-function hasValidationIssuesInRows(type, rowIndices) {
+function getModifiedIndices(type) {
   const s = S[type];
+  const out = [];
+  for (let i = 0; i < s.cur.length; i++) {
+    if (isModified(type, i)) out.push(i);
+  }
+  return out;
+}
+
+function hasValidationErrorsInRows(type, rowIndices) {
+  const s = S[type];
+  if (!Array.isArray(rowIndices) || !rowIndices.length) return false;
+  if (!s.validation?.cellIssues?.size) return false;
+  const rowSet = new Set(rowIndices);
   const issues = s.validation.cellIssues;
-  for (const idx of rowIndices) {
-    for (const col of TYPES[type].cols) {
-      if (issues.has(`${idx}:${col.k}`)) return true;
-    }
+  for (const [mapKey, issue] of issues.entries()) {
+    if (!issue || issue.level !== 'error') continue;
+    const sep = mapKey.indexOf(':');
+    if (sep === -1) continue;
+    const rowIdx = Number(mapKey.slice(0, sep));
+    if (Number.isInteger(rowIdx) && rowSet.has(rowIdx)) return true;
   }
   return false;
 }
@@ -164,40 +182,41 @@ function formatExportStamp(date = new Date()) {
   return `${y}-${m}-${d}_${hh}-${mm}-${ss}`;
 }
 
-function exportFiles(which, scope = 'modified') {
-  let types = [];
-  if (scope === 'selected') {
-    if (which === 'all') {
-      types = Object.keys(TYPES).filter(t => S[t].loaded && S[t].sel.size > 0);
-    } else if (S[which]?.loaded && S[which].sel.size > 0) {
-      types = [which];
-    }
-  } else {
-    types = which === 'all'
-      ? Object.keys(TYPES).filter(t => S[t].loaded && modCount(t) > 0)
-      : (S[which]?.loaded ? [which] : []);
-  }
-  if (!types.length) {
-    toast(scope === 'selected' ? 'No selected rows to export' : 'Nothing to export', 'inf');
+function exportFiles(which = activeTab, scope = 'all') {
+  const type = (which && S[which]?.loaded) ? which : (activeTab && S[activeTab]?.loaded ? activeTab : null);
+  if (!type) {
+    toast('No active file to export', 'inf');
     return;
   }
 
-  const blocked = types.filter(t => {
-    runValidation(t);
-    if (S[t].preflightStatic.errors.length > 0) return true;
-    if (scope === 'selected') return hasValidationIssuesInRows(t, getSelectedIndices(t));
-    return S[t].validation.errors > 0;
-  });
-  if (blocked.length) {
-    activeTab = blocked[0];
-    render();
-    toast(`Fix errors before export in ${blocked.map(t => TYPES[t].label).join(', ')}`, 'err');
+  let rowIndices = null;
+  if (scope === 'selected') rowIndices = getSelectedIndices(type);
+  if (scope === 'modified') rowIndices = getModifiedIndices(type);
+
+  if (scope !== 'all' && (!Array.isArray(rowIndices) || !rowIndices.length)) {
+    toast(scope === 'selected' ? 'No selected rows to export' : 'No modified rows to export', 'inf');
     return;
   }
-  types.forEach(type => {
-    const rowIndices = scope === 'selected' ? getSelectedIndices(type) : null;
-    exportOne(type, { rowIndices, scope });
-  });
+
+  runValidation(type);
+  if (S[type].preflightStatic.errors.length > 0) {
+    activeTab = type;
+    render();
+    toast(`Fix errors before export in ${TYPES[type].label}`, 'err');
+    return;
+  }
+
+  const hasErrors = rowIndices
+    ? hasValidationErrorsInRows(type, rowIndices)
+    : S[type].validation.errors > 0;
+  if (hasErrors) {
+    activeTab = type;
+    render();
+    toast(`Fix validation errors before export in ${TYPES[type].label}`, 'err');
+    return;
+  }
+
+  exportOne(type, { rowIndices, scope });
 }
 
 function exportOne(type, { rowIndices = null, scope = 'modified' } = {}) {
@@ -242,11 +261,16 @@ function exportOne(type, { rowIndices = null, scope = 'modified' } = {}) {
   const fn = type === 'campaigns' ? 'campaign' : type === 'adsets' ? 'ad_set' : 'ad';
   const scopeSuffix = scope === 'selected'
     ? `selected-${exportedRows}`
-    : `modified-${modCount(type)}_rows-${s.cur.length}`;
+    : scope === 'modified'
+      ? `modified-${exportedRows}`
+      : `all-${exportedRows}`;
   a.download = `${fn}_Edit_${stamp}_${scopeSuffix}.csv`;
   a.click();
   URL.revokeObjectURL(url);
-  toast(scope === 'selected'
+  const msg = scope === 'selected'
     ? `${cfg.label} selected export (${exportedRows} rows)`
-    : `${cfg.label} exported (${modCount(type)} changes)`, 'ok');
+    : scope === 'modified'
+      ? `${cfg.label} modified export (${exportedRows} rows)`
+      : `${cfg.label} full export (${exportedRows} rows)`;
+  toast(msg, 'ok');
 }
