@@ -1,0 +1,129 @@
+.json-tree .jt-section {
+  margin: 0;
+  padding-left: 18px;
+  border-left: 1px solid var(--border);
+}
+
+.json-tree .jt-line {
+  white-space: nowrap;
+}
+
+.json-tree .jt-facet-label {
+  display: inline-block;
+  background: color-mix(in srgb, var(--li-blue) 12%, transparent);
+  color: var(--li-blue);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  margin-left: 4px;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.json-tree .jt-count {
+  display: inline-block;
+  background: color-mix(in srgb, var(--text-muted) 15%, transparent);
+  color: var(--text-muted);
+  padding: 0 5px;
+  border-radius: 3px;
+  font-size: 10px;
+  margin-left: 3px;
+  font-weight: 600;
+}
+
+.ins-json-wrap {
+  position: relative;
+}
+
+.ins-json-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.ins-json-actions button {
+  max-width: 100%;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-muted);
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s;
+}
+
+.ins-json-actions button:hover {
+  border-color: var(--li-blue);
+  color: var(--li-blue);
+}
+
+.json-tree .jt-editable {
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0 2px;
+  transition: background .12s;
+}
+
+.json-tree .jt-editable:hover {
+  background: color-mix(in srgb, var(--li-blue) 12%, transparent);
+  outline: 1px dashed color-mix(in srgb, var(--li-blue) 40%, transparent);
+}
+
+.jt-edit-input {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: inherit;
+  padding: 1px 4px;
+  border: 1px solid var(--li-blue);
+  border-radius: 3px;
+  background: var(--bg-input);
+  color: var(--text);
+  outline: none;
+  min-width: 60px;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--li-blue) 20%, transparent);
+}
+
+.json-tree .jt-del {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-faint);
+  cursor: pointer;
+  margin-right: 2px;
+  opacity: 0;
+  transition: all .12s;
+  vertical-align: middle;
+}
+
+.json-tree .jt-line:hover>.jt-del {
+  opacity: 1;
+}
+
+.json-tree .jt-del:hover {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.json-tree .jt-add {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  color: var(--li-blue);
+  cursor: pointer;
+  transition: all .12s;
+  margin-left: 18px;
+}
+
+.json-tree .jt-add:hover {
+  background: color-mix(in srgb, var(--li-blue) 10%, transparent);
+}

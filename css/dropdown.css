@@ -1,0 +1,39 @@
+/* ===== DROPDOWN ===== */
+.dd {
+  position: relative;
+  display: inline-block;
+}
+
+.dd-menu {
+  position: fixed;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px var(--shadow-strong);
+  min-width: 180px;
+  z-index: 999;
+  display: none;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.dd-menu.open {
+  display: block;
+}
+
+.dd-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text);
+}
+
+.dd-item:last-child {
+  border-bottom: none;
+}
+
+.dd-item:hover {
+  background: var(--bg-hover);
+}
+

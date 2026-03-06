@@ -1,0 +1,206 @@
+/* Cell types */
+.c-id {
+  color: var(--text-faint);
+  font-size: 11px;
+  font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+  white-space: nowrap;
+}
+
+.c-ro {
+  color: var(--text-muted);
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.c-ro[title] {
+  cursor: help;
+}
+
+.c-ro.is-error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.c-ro.is-warn {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+/* Editable cells */
+.c-in {
+  padding: 3px 6px;
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  border-radius: 4px;
+  font-size: 12px;
+  outline: none;
+  width: 100%;
+  background: color-mix(in srgb, var(--bg-input) 50%, transparent);
+  font-family: inherit;
+  color: var(--text);
+  min-width: 80px;
+}
+
+.c-in:hover {
+  border-color: var(--border);
+  background: var(--bg-input);
+}
+
+.c-in:focus {
+  border-color: var(--li-blue);
+  background: var(--bg-input);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--li-blue) 12%, transparent);
+}
+
+.c-in.is-error {
+  border-color: color-mix(in srgb, var(--danger) 55%, var(--border) 45%);
+  background: color-mix(in srgb, var(--danger-bg) 65%, var(--bg-input) 35%);
+}
+
+.c-in.is-warn {
+  border-color: color-mix(in srgb, var(--warning) 45%, var(--border) 55%);
+  background: color-mix(in srgb, var(--warning-bg) 70%, var(--bg-input) 30%);
+}
+
+select.c-in {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  padding-right: 22px;
+  cursor: pointer;
+  min-width: 90px;
+}
+
+textarea.c-in {
+  resize: vertical;
+  min-height: 28px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+input[type="text"].c-in.wide {
+  min-width: 320px;
+}
+
+input[type="text"].c-in.url {
+  min-width: 220px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+
+input[type="text"].c-in.num {
+  min-width: 70px;
+  text-align: right;
+  width: 80px;
+}
+
+input[type="text"].c-in.date {
+  min-width: 90px;
+  width: 100px;
+}
+
+/* Expandable text */
+.expand-cell {
+  position: relative;
+}
+
+.expand-btn {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-size: 9px;
+  padding: 1px 4px;
+  cursor: pointer;
+  color: var(--text-muted);
+  z-index: 1;
+  opacity: 0.4;
+}
+
+.expand-cell:hover .expand-btn {
+  opacity: 1;
+}
+
+/* Checkbox */
+.ck {
+  width: 32px;
+  text-align: center;
+}
+
+.ck input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--li-blue);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--li-blue);
+}
+
+@media (prefers-color-scheme: dark) {
+  input[type="checkbox"] {
+    color-scheme: dark;
+  }
+}
+
+/* Status dot */
+.dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.dot-active {
+  background: var(--success);
+}
+
+.dot-paused {
+  background: var(--warning);
+}
+
+.dot-archived,
+.dot-removed,
+.dot-completed,
+.dot-canceled {
+  background: var(--text-faint);
+}
+
+.dot-draft {
+  background: var(--li-blue);
+}
+
+.status-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 116px;
+}
+
+.status-cell .dot {
+  margin-right: 0;
+  flex: 0 0 auto;
+}
+
+.status-select {
+  width: 110px;
+  min-width: 110px;
+  flex: 0 0 auto;
+}
+
+/* Empty */
+.empty {
+  text-align: center;
+  padding: 32px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+

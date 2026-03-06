@@ -6,12 +6,14 @@ A browser-based bulk editor for LinkedIn Campaign Manager CSV/TSV exports. Users
 
 ## Architecture
 
-**Single-file SPA** — all CSS, HTML, and JavaScript live in one file: `linkedin-bulk-editor.html` (~2,300 lines).
+**Static modular SPA** — entry HTML plus split vanilla CSS/JS modules (no framework, no build step).
 
 ### File Structure
 
 ```
-linkedin-bulk-editor.html   # The entire application
+index.html                 # Main entry point
+css/                       # Split style modules
+js/                        # Split vanilla JS modules
 ```
 
 ### Internal Layout (top → bottom)
@@ -67,7 +69,7 @@ Each type has a `cols` array defining column schema: `{ k, h, csv, edit, type, h
 
 ## Important Constraints
 
-- **Single file**: Do not split into multiple files unless explicitly asked.
+- **Modular files**: Keep code organized in `css/` and `js/`; do not collapse back into a monolith unless explicitly asked.
 - **No build tools**: No bundler, no npm, no transpilation. Code must run directly in the browser.
 - **No external JS dependencies**: Everything is vanilla. The only external resource is the Google Fonts CSS import.
 - **LinkedIn compatibility**: Exported TSV files must exactly match LinkedIn Campaign Manager's expected format (header prefixes like `*` and `**` are significant).

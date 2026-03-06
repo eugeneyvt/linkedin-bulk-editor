@@ -1,0 +1,42 @@
+/* ===== HEADER ===== */
+.header {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 20;
+  background: linear-gradient(115deg, #0a66c2 0%, #075aa9 45%, #046a7a 100%);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 24px rgba(4, 32, 65, 0.2);
+}
+
+.header .logo {
+  background: rgba(255, 255, 255, 0.22);
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #ffffff;
+  letter-spacing: .2px;
+}
+
+.header .meta {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+

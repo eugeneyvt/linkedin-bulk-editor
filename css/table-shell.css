@@ -1,0 +1,158 @@
+/* ===== TABLE ===== */
+.table-container {
+  border: 1px solid rgba(66, 84, 102, 0.18);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  background: var(--bg-elevated);
+  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.07);
+}
+
+.table-container.compact tbody td {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.table-container.compact thead th {
+  padding: 6px 8px;
+  font-size: 9px;
+}
+
+table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+thead th {
+  background: var(--bg-header);
+  padding: 8px 10px;
+  text-align: left;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  white-space: normal;
+  word-wrap: break-word;
+  user-select: none;
+  position: relative;
+  min-width: 60px;
+}
+
+thead th.sortable {
+  cursor: pointer;
+  padding-right: 18px;
+}
+
+thead th.sortable:hover {
+  color: var(--li-blue);
+}
+
+/* Resize handle on columns */
+thead th .resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  cursor: col-resize;
+  background: transparent;
+  z-index: 5;
+}
+
+thead th .resize-handle:hover,
+thead th .resize-handle.dragging {
+  background: var(--li-blue);
+  opacity: 0.5;
+}
+
+/* Sort indicators */
+thead th.sortable:hover {
+  color: var(--li-blue);
+}
+
+thead th .sort-arrow {
+  font-size: 9px;
+  margin-left: 3px;
+  color: var(--text-faint);
+  vertical-align: middle;
+}
+
+thead th.sort-asc .sort-arrow,
+thead th.sort-desc .sort-arrow {
+  color: var(--li-blue);
+  font-weight: 700;
+}
+
+tbody td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+}
+
+tbody tr {
+  transition: background 0.1s;
+}
+
+tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--bg-elevated) 92%, var(--bg-header) 8%);
+}
+
+tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+tbody tr.mod {
+  background: var(--warning-bg);
+  box-shadow: inset 4px 0 0 var(--warning);
+}
+
+tbody tr.issue {
+  box-shadow: inset 3px 0 0 0 color-mix(in srgb, var(--danger) 55%, transparent);
+}
+
+tbody tr.mod.issue {
+  box-shadow: inset 4px 0 0 var(--warning), inset -3px 0 0 0 color-mix(in srgb, var(--danger) 55%, transparent);
+}
+
+tbody tr.focus {
+  outline: 2px solid color-mix(in srgb, var(--li-blue) 55%, transparent);
+  outline-offset: -2px;
+}
+
+thead th:first-child,
+tbody td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: var(--bg-elevated);
+}
+
+thead th:first-child {
+  z-index: 6;
+}
+
+tbody tr:nth-child(even) td:first-child {
+  background: color-mix(in srgb, var(--bg-elevated) 92%, var(--bg-header) 8%);
+}
+
+tbody tr:hover td:first-child {
+  background: var(--bg-hover);
+}
+
+tbody tr.mod td:first-child {
+  background: var(--warning-bg);
+}
+

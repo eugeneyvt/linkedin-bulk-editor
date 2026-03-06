@@ -6,9 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LinkedIn Ads Bulk Editor</title>
   <link rel="stylesheet" href="css/theme.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/table.css">
-  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/container.css">
+  <link rel="stylesheet" href="css/uploads.css">
+  <link rel="stylesheet" href="css/tabs-metrics.css">
+  <link rel="stylesheet" href="css/toolbar.css">
+  <link rel="stylesheet" href="css/workspace-inspector.css">
+  <link rel="stylesheet" href="css/table-shell.css">
+  <link rel="stylesheet" href="css/table-cells.css">
+  <link rel="stylesheet" href="css/bottom-bar.css">
+  <link rel="stylesheet" href="css/dropdown.css">
+  <link rel="stylesheet" href="css/modal.css">
+  <link rel="stylesheet" href="css/toast-text-modal.css">
+  <link rel="stylesheet" href="css/audience-builder.css">
+  <link rel="stylesheet" href="css/json-tree-base.css">
+  <link rel="stylesheet" href="css/json-tree-controls.css">
+  <link rel="stylesheet" href="css/json-tree-dark.css">
+  <link rel="stylesheet" href="css/find-replace.css">
+  <link rel="stylesheet" href="css/inspector.css">
+  <link rel="stylesheet" href="css/theme-dark-overrides.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/accessibility.css">
 </head>
 
 <body>
@@ -83,6 +102,7 @@
     <div class="text-modal">
       <h3 id="tmTitle">Edit</h3>
       <div class="tm-view-toggle" id="tmToggle" style="display:none;">
+        <button id="tmBtnBuilder">Builder</button>
         <button id="tmBtnPretty" class="active">Pretty</button>
         <button id="tmBtnRaw">Raw</button>
         <div class="jt-toolbar" id="tmTreeToolbar">
@@ -94,6 +114,7 @@
             All</button>
         </div>
       </div>
+      <div id="tmBuilderView" class="aud-builder" style="display:none;"></div>
       <div id="tmJsonView" class="json-tree" style="display:none;"></div>
       <textarea id="tmArea"></textarea>
       <div class="btns"><button class="btn btn-s" id="tmCancel">Cancel</button><button class="btn btn-p"
@@ -138,8 +159,13 @@
   <script src="js/config.js"></script>
   <script src="js/state.js"></script>
   <script src="js/utils.js"></script>
-  <script src="js/io.js"></script>
-  <script src="js/render.js"></script>
+  <script src="js/upload-parse.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/render-core.js"></script>
+  <script src="js/toolbar.js"></script>
+  <script src="js/table-view.js"></script>
+  <script src="js/inspector.js"></script>
+  <script src="js/tab-badges.js"></script>
   <script src="js/modal-json.js"></script>
   <script src="js/actions.js"></script>
   <script src="js/resize.js"></script>

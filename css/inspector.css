@@ -1,0 +1,132 @@
+/* ===== SVG ICON BASE ===== */
+.icon-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-svg svg {
+  stroke: currentColor;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ===== INSPECTOR HEADER ===== */
+.ins-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.ins-header-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.ins-header h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  margin-bottom: 2px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ins-header .meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+
+.ins-close {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--text-muted);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ins-close:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+.ins-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ins-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+/* ===== PREFLIGHT COLLAPSED ===== */
+.preflight.collapsed .pf-list {
+  display: none;
+}
+
+.preflight .pf-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.preflight .pf-toggle:hover {
+  color: var(--text);
+  background: var(--bg-hover);
+}
+
+/* ===== GETTING STARTED HINT ===== */
+.getting-started {
+  background: color-mix(in srgb, var(--li-blue) 5%, var(--bg-elevated));
+  border: 1px solid color-mix(in srgb, var(--li-blue) 20%, var(--border));
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.getting-started svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--li-blue);
+  margin-top: 1px;
+}
+
+.getting-started strong {
+  color: var(--text);
+}
+
+.getting-started.hidden {
+  display: none;
+}
+

@@ -1,0 +1,116 @@
+/* ===== UPLOAD ZONE ===== */
+.uploads-ctl {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 6px;
+  min-height: 30px;
+}
+
+.uploads-toggle {
+  border: 1px solid rgba(66, 84, 102, 0.22);
+  background: #ffffff;
+  color: #3f546f;
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.uploads-toggle:hover {
+  border-color: var(--li-blue);
+  color: var(--li-blue);
+}
+
+.uploads {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.uploads.collapsed {
+  display: none;
+}
+
+.upload-card {
+  background: linear-gradient(150deg, var(--bg-elevated) 0%, color-mix(in srgb, var(--bg-elevated) 85%, var(--li-blue-light) 15%) 55%, color-mix(in srgb, var(--bg-elevated) 90%, var(--mint) 10%) 100%);
+  border: 2px dashed color-mix(in srgb, var(--li-blue) 35%, var(--border) 65%);
+  border-radius: 14px;
+  padding: 16px 14px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  animation: rise-in 0.28s ease both;
+}
+
+.upload-card:hover {
+  border-color: var(--li-blue);
+  border-style: solid;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(6, 47, 86, 0.16);
+}
+
+.upload-card.drag-over {
+  border-color: var(--li-blue);
+  border-style: solid;
+  background: color-mix(in srgb, var(--li-blue) 5%, var(--bg-elevated));
+  transform: translateY(-4px) scale(1.02);
+}
+
+.upload-card.loaded {
+  border-color: color-mix(in srgb, var(--success) 65%, var(--li-blue) 35%);
+  border-style: solid;
+  border-width: 1px;
+  background: linear-gradient(160deg, #ecfbf4 0%, #f5fffb 100%);
+  cursor: default;
+}
+
+.upload-card .ic {
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+}
+
+.upload-card .ic svg {
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.5;
+}
+
+.upload-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  margin-bottom: 2px;
+  color: var(--ink);
+}
+
+.upload-card p {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.upload-card .cnt {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--success);
+  margin-top: 4px;
+}
+
+.upload-card input {
+  display: none;
+}
+
+.upload-card .reload-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--li-blue);
+  cursor: pointer;
+  text-decoration: underline;
+}
+

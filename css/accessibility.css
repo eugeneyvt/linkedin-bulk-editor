@@ -1,0 +1,111 @@
+/* ===== SCROLLBAR STYLING ===== */
+.table-container::-webkit-scrollbar,
+#inspectorZone::-webkit-scrollbar,
+.dd-menu::-webkit-scrollbar,
+.modal::-webkit-scrollbar,
+.json-tree::-webkit-scrollbar,
+.aud-builder::-webkit-scrollbar,
+.text-modal textarea::-webkit-scrollbar,
+textarea.ins-field::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track,
+#inspectorZone::-webkit-scrollbar-track,
+.dd-menu::-webkit-scrollbar-track,
+.modal::-webkit-scrollbar-track,
+.json-tree::-webkit-scrollbar-track,
+.aud-builder::-webkit-scrollbar-track,
+.text-modal textarea::-webkit-scrollbar-track,
+textarea.ins-field::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-container::-webkit-scrollbar-thumb,
+#inspectorZone::-webkit-scrollbar-thumb,
+.dd-menu::-webkit-scrollbar-thumb,
+.modal::-webkit-scrollbar-thumb,
+.json-tree::-webkit-scrollbar-thumb,
+.aud-builder::-webkit-scrollbar-thumb,
+.text-modal textarea::-webkit-scrollbar-thumb,
+textarea.ins-field::-webkit-scrollbar-thumb {
+  background: rgba(120, 130, 145, 0.35);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover,
+#inspectorZone::-webkit-scrollbar-thumb:hover,
+.dd-menu::-webkit-scrollbar-thumb:hover,
+.modal::-webkit-scrollbar-thumb:hover,
+.json-tree::-webkit-scrollbar-thumb:hover,
+.aud-builder::-webkit-scrollbar-thumb:hover,
+.text-modal textarea::-webkit-scrollbar-thumb:hover,
+textarea.ins-field::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 130, 145, 0.55);
+  background-clip: content-box;
+}
+
+.table-container::-webkit-scrollbar-corner,
+#inspectorZone::-webkit-scrollbar-corner,
+.json-tree::-webkit-scrollbar-corner,
+.aud-builder::-webkit-scrollbar-corner,
+.text-modal textarea::-webkit-scrollbar-corner,
+textarea.ins-field::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar styling */
+.table-container,
+#inspectorZone,
+.dd-menu,
+.modal,
+.json-tree,
+.aud-builder,
+.text-modal textarea,
+textarea.ins-field {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 130, 145, 0.35) transparent;
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Tab content fade animation */
+#workspace {
+  animation: fade-in 0.12s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal-bg.open {
+    background: rgba(0, 0, 0, 0.65);
+  }
+
+  .getting-started {
+    background: color-mix(in srgb, var(--li-blue) 8%, var(--bg-elevated));
+    border-color: color-mix(in srgb, var(--li-blue) 25%, var(--border));
+  }
+}

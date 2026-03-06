@@ -1,0 +1,22 @@
+@media (prefers-color-scheme: dark) {
+  .json-tree .jt-key {
+    color: #79c0ff;
+  }
+
+  .json-tree .jt-str {
+    color: #a5d6ff;
+  }
+
+  .json-tree .jt-num {
+    color: #79c0ff;
+  }
+
+  .json-tree .jt-bool {
+    color: #ff7b72;
+  }
+
+  .json-tree .jt-null {
+    color: #8b949e;
+  }
+}
+

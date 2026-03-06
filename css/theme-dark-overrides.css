@@ -1,0 +1,132 @@
+@media (prefers-color-scheme: dark) {
+  body {
+    background:
+      radial-gradient(1300px 520px at 0% -15%, rgba(30, 129, 226, 0.22), transparent 58%),
+      radial-gradient(1000px 420px at 100% -15%, rgba(48, 154, 124, 0.16), transparent 55%),
+      linear-gradient(180deg, #161b22 0%, #11161d 35%, #151a20 100%),
+      var(--bg);
+  }
+
+  .header {
+    background: linear-gradient(120deg, #14385d 0%, #0d2f53 45%, #0d3f46 100%);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .uploads-toggle {
+    background: var(--bg-elevated);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  .upload-card {
+    background: linear-gradient(150deg, #242b33 0%, #252f3b 55%, #233239 100%);
+    border-color: rgba(112, 181, 249, 0.35);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  }
+
+  .upload-card.loaded {
+    background: linear-gradient(160deg, #173328 0%, #1a3a30 100%);
+    border-color: color-mix(in srgb, var(--success) 70%, var(--li-blue) 30%);
+  }
+
+  .upload-card h3 {
+    color: var(--text);
+  }
+
+  .upload-card p {
+    color: var(--text-muted);
+  }
+
+  .tab {
+    background: #242c36;
+    color: #c7d3e3;
+    border-color: #394454;
+  }
+
+  .tab:hover {
+    color: #ffffff;
+    border-color: #5a7090;
+  }
+
+  .tab.active {
+    color: #ffffff;
+    background: linear-gradient(120deg, #2b71b7 0%, #227fd4 100%);
+    box-shadow: 0 10px 24px rgba(34, 127, 212, 0.30);
+  }
+
+  .preflight,
+  .toolbar {
+    background: #242c36;
+    border-color: #394454;
+  }
+
+  .search {
+    background: #1e252f;
+    border-color: #415063;
+    color: #e8eef8;
+  }
+
+  .pill {
+    background: #1f2731;
+    border-color: #435063;
+    color: #cad7e9;
+  }
+
+  .pill.on {
+    color: #ffffff;
+    background: #2b71b7;
+    border-color: #2b71b7;
+  }
+
+  .table-container {
+    border-color: #394454;
+    background: #202733;
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.30);
+  }
+
+  thead th {
+    background: #2a3442;
+    color: #aebdd2;
+    border-bottom-color: #3d4b5e;
+  }
+
+  tbody td {
+    border-bottom-color: #303a48;
+    color: #d9e3f0;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #232d38;
+  }
+
+  tbody tr:hover {
+    background: #2b3645;
+  }
+
+  .bar {
+    background: linear-gradient(125deg, #252f3b 0%, #1f2732 100%);
+    border-color: rgba(112, 181, 249, 0.45);
+    box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.38);
+  }
+
+  .wh-card {
+    background: #242c36;
+    border-color: #394454;
+  }
+
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) 370px;
+  }
+
+  #inspectorZone {
+    background: #242c36;
+    border-color: #394454;
+  }
+
+  .ins-field {
+    background: #1e252f;
+    border-color: #415063;
+    color: #e8eef8;
+  }
+}

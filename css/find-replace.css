@@ -1,0 +1,146 @@
+/* ===== FIND & REPLACE PANEL ===== */
+.fnr-panel {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px 12px;
+  box-shadow: 0 8px 24px var(--shadow-strong);
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 30;
+  width: 380px;
+  max-width: calc(100% - 24px);
+}
+
+.fnr-panel.open {
+  display: block;
+}
+
+.fnr-panel h3 {
+  font-size: 13px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fnr-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.fnr-row input[type="text"] {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  outline: none;
+  background: var(--bg-input);
+  color: var(--text);
+}
+
+.fnr-row input[type="text"]:focus {
+  border-color: var(--li-blue);
+}
+
+.fnr-opts {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.fnr-opts label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.fnr-opts input[type="checkbox"] {
+  accent-color: var(--li-blue);
+}
+
+.fnr-results {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.fnr-results strong {
+  color: var(--li-blue);
+}
+
+.fnr-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.fnr-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.highlight-match {
+  background: rgba(255, 200, 0, 0.35);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes drop-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(10, 102, 194, 0.4);
+  }
+
+  100% {
+    box-shadow: 0 0 0 20px transparent;
+  }
+}
+

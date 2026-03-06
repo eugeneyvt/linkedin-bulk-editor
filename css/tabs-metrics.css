@@ -1,0 +1,190 @@
+/* ===== TABS ===== */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding: 3px 2px 10px;
+}
+
+.tab {
+  padding: 8px 14px;
+  cursor: pointer;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border: 1px solid rgba(66, 84, 102, 0.18);
+  border-radius: 12px;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  background: var(--bg-elevated);
+}
+
+.tab svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.tab:hover {
+  color: var(--text);
+  border-color: rgba(10, 102, 194, 0.4);
+}
+
+.tab.active {
+  color: #ffffff;
+  border-color: transparent;
+  background: linear-gradient(120deg, #0a66c2 0%, #0d79d4 100%);
+  box-shadow: 0 10px 24px rgba(10, 102, 194, 0.28);
+}
+
+.tab .badge {
+  background: var(--border);
+  color: var(--text-muted);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.tab.active .badge {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.tab .mod-badge {
+  background: var(--warning-bg);
+  color: var(--warning);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.preflight {
+  background: var(--bg-elevated);
+  border: 1px solid rgba(66, 84, 102, 0.18);
+  border-radius: 14px 14px 0 0;
+  padding: 10px 12px 8px;
+}
+
+.pf-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.pf-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.pf-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+
+.pf-chip.ok {
+  color: var(--success);
+  background: var(--success-bg);
+  border-color: color-mix(in srgb, var(--success) 20%, var(--border) 80%);
+}
+
+.pf-chip.warn {
+  color: var(--warning);
+  background: var(--warning-bg);
+  border-color: color-mix(in srgb, var(--warning) 20%, var(--border) 80%);
+}
+
+.pf-chip.err {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: color-mix(in srgb, var(--danger) 20%, var(--border) 80%);
+}
+
+.pf-list {
+  margin-top: 6px;
+  display: grid;
+  gap: 6px;
+}
+
+.pf-line {
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 6px 9px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.pf-line.err {
+  border-color: color-mix(in srgb, var(--danger) 30%, var(--border) 70%);
+  background: color-mix(in srgb, var(--danger-bg) 70%, transparent);
+}
+
+.pf-line.warn {
+  border-color: color-mix(in srgb, var(--warning) 30%, var(--border) 70%);
+  background: color-mix(in srgb, var(--warning-bg) 70%, transparent);
+}
+
+.pf-line.inf {
+  border-color: color-mix(in srgb, var(--li-blue) 25%, var(--border) 75%);
+  background: color-mix(in srgb, var(--li-blue-light) 50%, transparent);
+}
+
+.workspace-head {
+  margin: 0 0 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.wh-card {
+  background: var(--bg-elevated);
+  border: 1px solid rgba(66, 84, 102, 0.2);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+.wh-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .35px;
+  color: var(--text-faint);
+  margin-bottom: 2px;
+}
+
+.wh-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.wh-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+

@@ -1,0 +1,96 @@
+@media (max-width: 900px) {
+  .header {
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+
+  .header h1 {
+    font-size: 15px;
+  }
+
+  .header .meta {
+    margin-left: 0;
+    width: 100%;
+    white-space: normal;
+  }
+
+  .container {
+    padding: 10px 10px 90px;
+  }
+
+  .uploads {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-card {
+    padding: 14px 10px;
+  }
+
+  .tabs {
+    padding-bottom: 8px;
+  }
+
+  .tab {
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+
+  .workspace-head {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .workspace,
+  .workspace.no-inspector {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #inspectorZone {
+    position: static;
+    max-height: none;
+    min-height: 0;
+  }
+
+  .table-container {
+    max-height: calc(100vh - 380px);
+  }
+
+  .bar {
+    width: calc(100% - 16px);
+    padding: 8px 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .bar .left {
+    justify-content: center;
+  }
+
+  .bar .right {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .expand-btn {
+    opacity: 1;
+  }
+
+  .ck {
+    width: 28px;
+  }
+
+  .btn {
+    font-size: 11px;
+  }
+
+  .pf-head {
+    align-items: flex-start;
+  }
+
+  .fnr-row {
+    flex-wrap: wrap;
+  }
+}
+

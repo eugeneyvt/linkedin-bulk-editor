@@ -1,0 +1,134 @@
+/* ===== MODAL ===== */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-bg.open {
+  display: flex;
+  animation: fade-in 0.15s ease;
+}
+
+.modal {
+  background: var(--bg-elevated);
+  border-radius: 12px;
+  max-width: 800px;
+  width: 94%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 20px;
+  animation: scale-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal h2 {
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.modal h3 {
+  margin: 14px 0 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal h3 svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+.review-filters {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.rf-btn {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-elevated);
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--text);
+}
+
+.rf-btn.on {
+  border-color: var(--li-blue);
+  color: var(--li-blue);
+  background: var(--li-blue-light);
+}
+
+.diff-item {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  background: var(--bg-hover);
+}
+
+.diff-item .name {
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.risk-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--warning);
+  background: var(--warning-bg);
+  border: 1px solid color-mix(in srgb, var(--warning) 25%, var(--border) 75%);
+}
+
+.diff-row {
+  display: flex;
+  gap: 5px;
+  font-size: 11px;
+  margin: 2px 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.diff-field {
+  font-weight: 600;
+  min-width: 70px;
+  color: var(--text-muted);
+}
+
+.diff-old {
+  color: var(--danger);
+  text-decoration: line-through;
+  word-break: break-all;
+}
+
+.diff-new {
+  color: var(--success);
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.diff-arrow {
+  color: var(--text-faint);
+}
+
+.modal .btns {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
