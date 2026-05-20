@@ -8,7 +8,7 @@ const FACET_LABELS = {
   'urn:li:adTargetingFacet:companyConnections': 'Company Connections',
   'urn:li:adTargetingFacet:companyFollowersOf': 'Company Followers',
   'urn:li:adTargetingFacet:companyGrowthRate': 'Company Growth Rate',
-  'urn:li:adTargetingFacet:companyRevenueRanges': 'Company Revenue',
+  'urn:li:adTargetingFacet:revenue': 'Company Revenue',
   'urn:li:adTargetingFacet:degrees': 'Degrees',
   'urn:li:adTargetingFacet:dynamicSegments': 'Dynamic Segments',
   'urn:li:adTargetingFacet:employers': 'Current Employers',
@@ -491,7 +491,7 @@ function renderAudienceBuilder() {
             : `<option value="${esc(value)}" selected>${esc(`Custom: ${valueHelp(facetKey, value) || compactValueForEdit(value) || value || '(empty)'}`)}</option>`;
           control = `<select class="aud-select" ${inputAttrs}>${options}${custom}</select>`;
         } else {
-          const prefix = splitUrnValue(value)?.prefix || fallbackPrefix;
+          const prefix = splitUrnValue(value)?.prefix || fallbackPrefix || (typeof getAudienceFacetDefaultPrefix === 'function' ? getAudienceFacetDefaultPrefix(facetKey) : '');
           control = `<input class="aud-input" ${inputAttrs} data-aud-prefix="${esc(prefix || '')}" value="${esc(compactValueForEdit(value))}" placeholder="${prefix ? 'Value id or full URN' : 'Value'}">`;
         }
 
@@ -684,7 +684,10 @@ function renderAudienceBuilder() {
         arr[idx] = input.value;
       } else {
         const currentPrefix = splitUrnValue(arr[idx])?.prefix;
-        const fallbackPrefix = input.dataset.audPrefix || currentPrefix || inferFacetPrefix(arr);
+        const fallbackPrefix = input.dataset.audPrefix
+          || currentPrefix
+          || inferFacetPrefix(arr)
+          || (typeof getAudienceFacetDefaultPrefix === 'function' ? getAudienceFacetDefaultPrefix(facetKey) : '');
         arr[idx] = normalizeValueForStorage(input.value, fallbackPrefix);
         const nextPrefix = splitUrnValue(arr[idx])?.prefix || fallbackPrefix || '';
         input.dataset.audPrefix = nextPrefix;

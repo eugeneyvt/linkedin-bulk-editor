@@ -223,12 +223,24 @@ function exportOne(type, { rowIndices = null, scope = 'modified' } = {}) {
   const cfg = TYPES[type]; const s = S[type];
   let lines = [...s.hdrLines, s.hdrRow];
   let exportedRows = 0;
+  const audienceStringIdx = type === 'adsets' ? s.colToHeaderIndex?.audienceString : undefined;
+  const normalizeExportAudience = value => {
+    if (type !== 'adsets' || typeof normalizeAudienceString !== 'function') return String(value || '');
+    const normalized = normalizeAudienceString(value, { strict: false });
+    if (normalized?.ok) return normalized.value;
+    return String(value || '');
+  };
 
   if (s.rawCur.length) {
     const rows = Array.isArray(rowIndices) ? rowIndices.map(i => s.rawCur[i]).filter(Boolean) : s.rawCur;
     exportedRows = rows.length;
     rows.forEach(row => {
-      const vals = row.map(v => `"${(v || '').replace(/"/g, '""')}"`);
+      const vals = row.map((v, idx) => {
+        const out = audienceStringIdx !== undefined && idx === audienceStringIdx
+          ? normalizeExportAudience(v)
+          : String(v || '');
+        return `"${out.replace(/"/g, '""')}"`;
+      });
       lines.push(vals.join('\t'));
     });
   } else {
@@ -236,7 +248,8 @@ function exportOne(type, { rowIndices = null, scope = 'modified' } = {}) {
     exportedRows = rows.length;
     rows.forEach(r => {
       const vals = cfg.cols.map(c => {
-        const v = (r[c.k] || '').replace(/"/g, '""');
+        const source = c.k === 'audienceString' ? normalizeExportAudience(r[c.k]) : String(r[c.k] || '');
+        const v = source.replace(/"/g, '""');
         return `"${v}"`;
       });
       lines.push(vals.join('\t'));

@@ -181,14 +181,61 @@ function abResolveTokenForFacet(token, facetKey, fallbackPrefix) {
     }
   }
 
+  if (typeof audienceNormalizeFacetValue === 'function') {
+    const normalized = audienceNormalizeFacetValue(
+      facetKey,
+      raw,
+      fallbackPrefix || (typeof getAudienceFacetDefaultPrefix === 'function' ? getAudienceFacetDefaultPrefix(facetKey) : '')
+    );
+    return normalized.value || '';
+  }
   return fallbackPrefix ? `${fallbackPrefix}${raw}` : raw;
 }
 
 function abParseValuesInput(raw) {
-  const values = String(raw || '')
-    .split(/[\n,;]+/)
-    .map(v => v.trim())
-    .filter(Boolean);
+  const values = [];
+  let token = '';
+  let quote = '';
+  let roundDepth = 0;
+  let squareDepth = 0;
+  let curlyDepth = 0;
+
+  const pushToken = () => {
+    const next = token.trim();
+    token = '';
+    if (next) values.push(next);
+  };
+
+  for (const ch of String(raw || '')) {
+    if (quote) {
+      token += ch;
+      if (ch === quote) quote = '';
+      continue;
+    }
+
+    if (ch === '"' || ch === '\'') {
+      quote = ch;
+      token += ch;
+      continue;
+    }
+
+    if (ch === '(') roundDepth++;
+    else if (ch === ')' && roundDepth > 0) roundDepth--;
+    else if (ch === '[') squareDepth++;
+    else if (ch === ']' && squareDepth > 0) squareDepth--;
+    else if (ch === '{') curlyDepth++;
+    else if (ch === '}' && curlyDepth > 0) curlyDepth--;
+
+    const atTopLevel = roundDepth === 0 && squareDepth === 0 && curlyDepth === 0;
+    if ((ch === '\n' || ch === ';') || (ch === ',' && atTopLevel)) {
+      pushToken();
+      continue;
+    }
+
+    token += ch;
+  }
+
+  pushToken();
   return Array.from(new Set(values));
 }
 
@@ -411,7 +458,8 @@ function abResolveValuesForRow(rawTokens, facetKey, root) {
   if (excludeInfo.orPlacement) placements.push(excludeInfo.orPlacement);
   excludeInfo.andPlacements.forEach(x => placements.push(x));
 
-  const prefix = abInferPrefixFromPlacements(placements);
+  const prefix = abInferPrefixFromPlacements(placements)
+    || (typeof getAudienceFacetDefaultPrefix === 'function' ? getAudienceFacetDefaultPrefix(facetKey) : '');
   const resolved = rawTokens.map(v => abResolveTokenForFacet(v, facetKey, prefix)).filter(Boolean);
   return Array.from(new Set(resolved));
 }
@@ -654,6 +702,8 @@ function abUpdateFormState() {
     if (labels) {
       const sample = Object.values(labels).slice(0, 5).join(', ');
       noteText = `Known values for this facet: ${sample}${Object.keys(labels).length > 5 ? ', ...' : ''}`;
+    } else if (facetKey === 'urn:li:adTargetingFacet:revenue' || facetKey === 'urn:li:adTargetingFacet:companyRevenueRanges') {
+      noteText = 'Revenue values use range tokens like (-2147483647,1). Put one per line or separate values with semicolons.';
     }
   }
 

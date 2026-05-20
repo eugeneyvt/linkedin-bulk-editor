@@ -147,7 +147,11 @@ function sanitizeStateCellValue(value) {
 
 function setCellValue(t, i, k, value) {
   const s = S[t];
-  const nextValue = sanitizeStateCellValue(value);
+  let nextValue = sanitizeStateCellValue(value);
+  if (t === 'adsets' && k === 'audienceString' && typeof normalizeAudienceString === 'function') {
+    const normalized = normalizeAudienceString(nextValue, { strict: false });
+    if (normalized?.ok) nextValue = normalized.value;
+  }
   s.cur[i][k] = nextValue;
   const hi = s.colToHeaderIndex[k];
   if (hi !== undefined && s.rawCur[i]) s.rawCur[i][hi] = nextValue;
@@ -383,6 +387,27 @@ function runValidation(type) {
       if (!audienceTemplateVal && !audienceStringVal && (isNewRow || audienceTemplateChanged || audienceStringChanged)) {
         addIssue(i, 'audienceTemplateId', 'error', 'Provide Audience Template ID or Audience String');
         addIssue(i, 'audienceString', 'error', 'Provide Audience Template ID or Audience String');
+      }
+      if (audienceTemplateVal && audienceStringVal && (isNewRow || audienceTemplateChanged || audienceStringChanged)) {
+        addIssue(i, 'audienceTemplateId', 'error', 'Use either Audience Template ID or Audience String, not both');
+        addIssue(i, 'audienceString', 'error', 'Use either Audience Template ID or Audience String, not both');
+      }
+      if (audienceStringVal) {
+        if (typeof normalizeAudienceString === 'function') {
+          const audienceCheck = normalizeAudienceString(audienceStringVal, { strict: true });
+          if (!audienceCheck.ok) {
+            addIssue(i, 'audienceString', 'error', audienceCheck.errors[0] || 'Audience String must be valid JSON');
+          } else {
+            audienceCheck.errors.forEach(msg => addIssue(i, 'audienceString', 'error', msg));
+            if (!audienceCheck.errors.length) {
+              audienceCheck.warnings.forEach(msg => addIssue(i, 'audienceString', 'warn', msg));
+            }
+          }
+        } else {
+          try { JSON.parse(audienceStringVal); } catch (_) {
+            addIssue(i, 'audienceString', 'error', 'Audience String must be valid JSON');
+          }
+        }
       }
 
       if (profileLanguageChanged && wasPersisted && !isDraftOrNewAdSetStatus(baseStatus)) {
